@@ -103,6 +103,12 @@ public class SecurityConfig {
         if (!origins.contains("https://*.vercel.app")) {
             origins.add("https://*.vercel.app");
         }
+        if (!origins.contains("https://farmer-customer.onrender.com")) {
+            origins.add("https://farmer-customer.onrender.com");
+        }
+        if (!origins.contains("https://farmer-customer.onrender.com/")) {
+            origins.add("https://farmer-customer.onrender.com/");
+        }
         if (!origins.contains("http://localhost:[*]")) {
             origins.add("http://localhost:[*]");
         }
