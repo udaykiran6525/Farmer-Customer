@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Admin Dashboard | Farmigo Enterprise</title>
+  <meta name="description" content="Super Admin Dashboard for Farmigo Platform - Monitor Users, Approve Products, System Health & Support Ticket Governance." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/admin-style.css" />
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- SIDEBAR -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-header">
+        <a href="/admin/dashboard" class="sidebar-logo">
+          <span style="font-size: 1.6rem;">🛡️</span>
+          <span class="sidebar-logo-text">Farmi<span>go</span></span>
+        </a>
+        <span class="badge-admin">ENTERPRISE</span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main Navigation</div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="#overview" class="sidebar-link active" data-tab="overview">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+              </svg>
+              <span>Dashboard Overview</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#users" class="sidebar-link" data-tab="users">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+              <span>User Management</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#products" class="sidebar-link" data-tab="products">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <span>Product Moderation</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="#tickets" class="sidebar-link" data-tab="tickets">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+              <span>System & Tickets</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="nav-section-label">Quick Links</div>
+        <ul class="sidebar-menu">
+          <li class="sidebar-item">
+            <a href="/" class="sidebar-link" target="_blank">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+              </svg>
+              <span>View Landing Page</span>
+            </a>
+          </li>
+          <li class="sidebar-item">
+            <a href="/products.html" class="sidebar-link" target="_blank">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              <span>Marketplace Catalog</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="admin-user-profile">
+          <div class="admin-avatar" id="sidebarAvatar">SA</div>
+          <div class="admin-info">
+            <div class="admin-name" id="sidebarAdminName">Super Admin</div>
+            <div class="admin-role">System Controller</div>
+          </div>
+          <button class="btn-logout-sidebar" id="btnLogout" title="Logout Super Admin">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN AREA -->
+    <main class="admin-main">
+      <!-- TOPBAR -->
+      <header class="admin-topbar">
+        <div class="topbar-left">
+          <button class="btn-sidebar-toggle" id="btnToggleSidebar" aria-label="Toggle Navigation">
+            ☰
+          </button>
+          <div class="page-title-wrap">
+            <h1 id="topbarTitle">Dashboard Overview</h1>
+            <p id="topbarSubtitle">Real-time platform metrics and live MySQL database analytics.</p>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="system-status-pill">
+            <span class="status-dot-animated"></span>
+            <span>System Operational | MySQL 8.0</span>
+          </div>
+          <button class="btn-topbar-action btn-refresh-stats" id="btnRefreshStats" title="Refresh Live Data">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+            <span>Refresh Data</span>
+          </button>
+          <a href="/" class="btn-topbar-action btn-portal-back">
+            <span>← Exit Portal</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY -->
+      <div class="admin-content">
+
+        <!-- TAB 1: OVERVIEW -->
+        <section id="pane-overview" class="tab-pane active">
+          <!-- STATS GRID -->
+          <div class="stats-grid">
+            <div class="stat-card green">
+              <div class="stat-header">
+                <span class="stat-title">Total Registered Users</span>
+                <div class="stat-icon">👥</div>
+              </div>
+              <div class="stat-value" id="statTotalUsers">0</div>
+              <div class="stat-trend neutral">
+                <span id="statUsersBreakdown">0 Farmers | 0 Customers</span>
+              </div>
+            </div>
+
+            <div class="stat-card orange">
+              <div class="stat-header">
+                <span class="stat-title">Active Farmers</span>
+                <div class="stat-icon">🌾</div>
+              </div>
+              <div class="stat-value" id="statTotalFarmers">0</div>
+              <div class="stat-trend up">
+                <span>↑ Verified Agricultural Sellers</span>
+              </div>
+            </div>
+
+            <div class="stat-card blue">
+              <div class="stat-header">
+                <span class="stat-title">Active Customers</span>
+                <div class="stat-icon">🛒</div>
+              </div>
+              <div class="stat-value" id="statTotalCustomers">0</div>
+              <div class="stat-trend up">
+                <span>↑ Active Marketplace Buyers</span>
+              </div>
+            </div>
+
+            <div class="stat-card purple">
+              <div class="stat-header">
+                <span class="stat-title">Platform Revenue</span>
+                <div class="stat-icon">₹</div>
+              </div>
+              <div class="stat-value" id="statTotalRevenue">₹0</div>
+              <div class="stat-trend up">
+                <span>↑ Cumulative Completed Orders</span>
+              </div>
+            </div>
+
+            <div class="stat-card green">
+              <div class="stat-header">
+                <span class="stat-title">Total Products Listed</span>
+                <div class="stat-icon">📦</div>
+              </div>
+              <div class="stat-value" id="statTotalProducts">0</div>
+              <div class="stat-trend neutral">
+                <span id="statApprovedProducts">0 Approved in Marketplace</span>
+              </div>
+            </div>
+
+            <div class="stat-card orange">
+              <div class="stat-header">
+                <span class="stat-title">Pending Approvals</span>
+                <div class="stat-icon">⏳</div>
+              </div>
+              <div class="stat-value" id="statPendingProducts" style="color: #FBBF24;">0</div>
+              <div class="stat-trend down">
+                <span>⚠️ Requiring Super Admin Review</span>
+              </div>
+            </div>
+
+            <div class="stat-card blue">
+              <div class="stat-header">
+                <span class="stat-title">Total Orders Placed</span>
+                <div class="stat-icon">📋</div>
+              </div>
+              <div class="stat-value" id="statTotalOrders">0</div>
+              <div class="stat-trend up">
+                <span>↑ Marketplace Transactions</span>
+              </div>
+            </div>
+
+            <div class="stat-card red">
+              <div class="stat-header">
+                <span class="stat-title">Support Tickets</span>
+                <div class="stat-icon">🎫</div>
+              </div>
+              <div class="stat-value" id="statTotalTickets">0</div>
+              <div class="stat-trend neutral">
+                <span>User Inquiries & Assistance</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CHARTS GRID -->
+          <div class="charts-grid">
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3 class="chart-title">📈 Platform Revenue & Sales Trend</h3>
+                <span class="status-badge active">Live MySQL</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3 class="chart-title">👥 User Role Distribution</h3>
+                <span class="status-badge active">Farmers vs Customers</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="userRoleChart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3 class="chart-title">📋 Order Status Breakdown</h3>
+                <span class="status-badge active">Fulfillment Status</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="orderStatusChart"></canvas>
+              </div>
+            </div>
+
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3 class="chart-title">🌾 Product Categories Distribution</h3>
+                <span class="status-badge active">Marketplace Catalog</span>
+              </div>
+              <div class="chart-container">
+                <canvas id="categoryChart"></canvas>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 2: USER MANAGEMENT -->
+        <section id="pane-users" class="tab-pane">
+          <div class="admin-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>👥 User Management System</h2>
+                <p>Monitor, inspect, block, or unblock Farmers and Customers across the platform.</p>
+              </div>
+              <div class="panel-controls">
+                <div class="search-box">
+                  <input type="text" id="userSearchInput" placeholder="Search by Name, Email or Phone..." />
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+                <select class="filter-select" id="userRoleFilter">
+                  <option value="all">All Roles</option>
+                  <option value="farmer">Farmers Only</option>
+                  <option value="customer">Customers Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>User Profile</th>
+                    <th>Phone Contact</th>
+                    <th>Role</th>
+                    <th>Location / State</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Administrative Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">⏳ Loading users from MySQL database...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 3: PRODUCT MODERATION -->
+        <section id="pane-products" class="tab-pane">
+          <div class="admin-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>🌾 Product Moderation & Approval System</h2>
+                <p>Review farmer listings. Approve products to make them live on the marketplace or reject non-compliant items.</p>
+              </div>
+              <div class="panel-controls">
+                <div class="search-box">
+                  <input type="text" id="productSearchInput" placeholder="Search product or farmer name..." />
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+                <select class="filter-select" id="productStatusFilter">
+                  <option value="all">All Statuses</option>
+                  <option value="pending">Pending Review Only</option>
+                  <option value="approved">Approved Live Only</option>
+                  <option value="rejected">Rejected Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Product Item</th>
+                    <th>Farmer Seller</th>
+                    <th>Price & Unit</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th style="text-align: right;">Moderation Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">⏳ Loading products from MySQL database...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- TAB 4: SYSTEM & TICKETS -->
+        <section id="pane-tickets" class="tab-pane">
+          <!-- TICKETS SUMMARY MINI CARDS -->
+          <div class="tickets-summary-row">
+            <div class="ticket-mini-card">
+              <div>
+                <div class="ticket-mini-label">Total Tickets</div>
+                <div class="ticket-mini-val" id="ticketStatTotal">6</div>
+              </div>
+              <div style="font-size: 1.8rem;">🎫</div>
+            </div>
+            <div class="ticket-mini-card" style="border-color: rgba(245, 158, 11, 0.3);">
+              <div>
+                <div class="ticket-mini-label" style="color: #FCD34D;">Action Required</div>
+                <div class="ticket-mini-val" id="ticketStatPending" style="color: #FBBF24;">3</div>
+              </div>
+              <div style="font-size: 1.8rem;">⏳</div>
+            </div>
+            <div class="ticket-mini-card" style="border-color: rgba(16, 185, 129, 0.3);">
+              <div>
+                <div class="ticket-mini-label" style="color: #6EE7B7;">Resolved Rate</div>
+                <div class="ticket-mini-val" id="ticketStatResolved" style="color: #34D399;">50%</div>
+              </div>
+              <div style="font-size: 1.8rem;">✅</div>
+            </div>
+            <div class="ticket-mini-card" style="border-color: rgba(99, 102, 241, 0.3);">
+              <div>
+                <div class="ticket-mini-label" style="color: #A5B4FC;">System Health</div>
+                <div class="ticket-mini-val" style="color: #818CF8;">100%</div>
+              </div>
+              <div style="font-size: 1.8rem;">⚡</div>
+            </div>
+          </div>
+
+          <!-- SUPPORT TICKETS PANEL -->
+          <div class="admin-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>🎫 Customer & Farmer Support Tickets</h2>
+                <p>Manage user technical requests, payment inquiries, quality disputes, and assistance tickets.</p>
+              </div>
+              <div class="panel-controls">
+                <div class="search-box">
+                  <input type="text" id="ticketSearchInput" placeholder="Search ticket ID, user, or subject..." />
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
+                <select class="filter-select" id="ticketCategoryFilter">
+                  <option value="all">All Categories</option>
+                  <option value="PAYMENT">Payment Issue</option>
+                  <option value="QUALITY">Quality Dispute</option>
+                  <option value="TECHNICAL">Technical Help</option>
+                  <option value="LOGISTICS">Logistics Tracking</option>
+                  <option value="ACCOUNT">Account Help</option>
+                </select>
+                <select class="filter-select" id="ticketStatusFilter">
+                  <option value="all">All Statuses</option>
+                  <option value="OPEN">Open Only</option>
+                  <option value="PENDING">Pending Action</option>
+                  <option value="IN_PROGRESS">In Progress</option>
+                  <option value="RESOLVED">Resolved Only</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Ticket ID</th>
+                    <th>User Contact</th>
+                    <th>Category</th>
+                    <th>Subject & Message Preview</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Timestamp</th>
+                    <th style="text-align: right;">Resolution Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="ticketsTableBody">
+                  <tr>
+                    <td colspan="8" style="text-align: center; padding: 2rem; color: var(--text-muted);">⏳ Loading support tickets from database...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- SYSTEM AUDIT LOGS PANEL -->
+          <div class="admin-panel">
+            <div class="panel-header">
+              <div class="panel-title-group">
+                <h2>🛡️ Real-Time System & Security Audit Logs</h2>
+                <p>Audit system events, admin authentication, user status changes, and database modifications.</p>
+              </div>
+              <button class="btn-topbar-action btn-refresh-stats" id="btnRefreshLogs">
+                <span>🔄 Reload Logs</span>
+              </button>
+            </div>
+
+            <div class="table-responsive">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th>Log ID</th>
+                    <th>Admin / Initiator</th>
+                    <th>Action Event</th>
+                    <th>Target Resource</th>
+                    <th>Details / Summary</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody id="logsTableBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 2rem; color: var(--text-muted);">⏳ Fetching system audit activity logs...</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL 1: USER DETAILS -->
+  <div class="admin-modal-overlay" id="userDetailsModal">
+    <div class="admin-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">👤 User Profile Details</h3>
+        <button class="btn-modal-close" data-close-modal="userDetailsModal">&times;</button>
+      </div>
+      <div class="modal-body" id="userDetailsContent">
+        <!-- Dynamically injected -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" data-close-modal="userDetailsModal">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: BLOCK USER REASON -->
+  <div class="admin-modal-overlay" id="blockUserModal">
+    <div class="admin-modal-card">
+      <div class="modal-header" style="background: rgba(244, 63, 94, 0.1); border-bottom-color: rgba(244, 63, 94, 0.3);">
+        <h3 class="modal-title" style="color: #FB7185;">⚠️ Block User Access</h3>
+        <button class="btn-modal-close" data-close-modal="blockUserModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 1rem; color: var(--text-body);">
+          You are about to block <strong id="blockUserName" style="color: #FFF;">User</strong> from logging into Farmigo.
+          Please specify an administrative reason for blocking this account:
+        </p>
+        <input type="hidden" id="blockUserId" />
+        <textarea 
+          id="blockReasonInput" 
+          rows="4" 
+          style="width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid var(--admin-border-glass); border-radius: var(--radius-sm); padding: 0.75rem; color: #FFF; outline: none;" 
+          placeholder="e.g. Violation of marketplace terms, fraudulent activity, spam listing..."></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" data-close-modal="blockUserModal">Cancel</button>
+        <button class="btn-modal-confirm danger" id="btnConfirmBlock">🚫 Confirm Block User</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: PRODUCT DETAILS -->
+  <div class="admin-modal-overlay" id="productDetailsModal">
+    <div class="admin-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">🌾 Product Specification</h3>
+        <button class="btn-modal-close" data-close-modal="productDetailsModal">&times;</button>
+      </div>
+      <div class="modal-body" id="productDetailsContent">
+        <!-- Dynamically injected -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" data-close-modal="productDetailsModal">Close Window</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: PRODUCT APPROVAL CONFIRMATION -->
+  <div class="admin-modal-overlay" id="approveConfirmModal">
+    <div class="admin-modal-card" style="max-width: 460px; text-align: center; padding: 1rem;">
+      <div class="modal-header" style="background: rgba(16, 185, 129, 0.1); border-bottom-color: rgba(16, 185, 129, 0.3); justify-content: center; position: relative;">
+        <h3 class="modal-title" style="color: #34D399; font-size: 1.3rem;">✅ Approve Product?</h3>
+        <button class="btn-modal-close" data-close-modal="approveConfirmModal" style="position: absolute; right: 1.5rem;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 2rem 1.5rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">🌾</div>
+        <p style="font-size: 1.1rem; color: #FFFFFF; line-height: 1.6; margin-bottom: 0.5rem; font-weight: 600;">
+          Are you sure you want to approve this product for the live marketplace?
+        </p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">
+          It will become immediately visible and purchasable by all customers across Farmigo.
+        </p>
+        <input type="hidden" id="approveProdId" />
+      </div>
+      <div class="modal-footer" style="justify-content: center; gap: 1rem;">
+        <button class="btn-modal-cancel" data-close-modal="approveConfirmModal" style="padding: 0.75rem 1.5rem;">Cancel</button>
+        <button class="btn-modal-confirm" id="btnConfirmApprove" style="padding: 0.75rem 1.5rem;">✅ Approve Product</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: TICKET DETAIL & RESOLUTION -->
+  <div class="admin-modal-overlay" id="ticketDetailsModal">
+    <div class="admin-modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="ticketModalTitle">🎫 Support Ticket Details</h3>
+        <button class="btn-modal-close" data-close-modal="ticketDetailsModal">&times;</button>
+      </div>
+      <div class="modal-body" id="ticketModalContent">
+        <!-- Dynamically injected -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn-modal-cancel" data-close-modal="ticketDetailsModal">Close</button>
+        <button class="btn-modal-confirm" id="btnResolveTicketModal">✅ Update & Resolve Ticket</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 6: LOGOUT CONFIRMATION -->
+  <div class="admin-modal-overlay" id="adminLogoutModal">
+    <div class="admin-modal-card" style="max-width: 420px; text-align: center;">
+      <div class="modal-header" style="justify-content: center; position: relative;">
+        <h3 class="modal-title">Logout Confirmation</h3>
+        <button class="btn-modal-close" data-close-modal="adminLogoutModal" style="position: absolute; right: 1.5rem;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 2rem 1.5rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">🚪</div>
+        <p style="font-size: 1.1rem; color: #FFFFFF; font-weight: 600;">
+          Are you sure you want to exit the Admin Portal?
+        </p>
+      </div>
+      <div class="modal-footer" style="justify-content: center; gap: 1rem;">
+        <button class="btn-modal-cancel" data-close-modal="adminLogoutModal">Cancel</button>
+        <button class="btn-modal-confirm danger" id="btnConfirmLogout">Confirm Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="admin-toast-container" id="toastContainer"></div>
+
+  <!-- DASHBOARD SCRIPT -->
+  <script src="/admin-dashboard.js"></script>
+</body>
+</html>

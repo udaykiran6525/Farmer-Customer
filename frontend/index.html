@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmigo – Fresh Farm Products Delivered Directly From Farmers</title>
+  <meta name="description"
+    content="Buy premium vegetables, fruits, grains and pulses directly from trusted farmers without middlemen. Farmigo – India's leading agriculture marketplace." />
+  <link rel="stylesheet" href="/style.css?v=3.0" />
+  <!-- Embedded Navbar Style: Pure Transparent Floating Over Hero -->
+  <style>
+    #navbar,
+    #navbar.scrolled {
+      position: absolute !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      z-index: 1000 !important;
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+
+    #home {
+      min-height: 100vh !important;
+      padding-top: 7.5rem !important;
+    }
+
+    .nav-badge {
+      display: none;
+      opacity: 0;
+      transform: scale(0);
+    }
+
+    .nav-badge.show {
+      display: flex !important;
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+
+
+    .nav-badge:empty {
+      display: none !important;
+      opacity: 0 !important;
+    }
+
+    .mobile-menu {
+      position: absolute !important;
+      top: 70px !important;
+      background: rgba(10, 20, 15, 0.96) !important;
+      backdrop-filter: blur(20px) !important;
+    }
+  </style>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <!-- Premium Outfit Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+
+<body>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ═══════════════════════════════════════
+     NAVBAR (Sticky Glassmorphism)
+════════════════════════════════════════ -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <!-- Premium Brand Logo -->
+      <a href="#home" class="nav-logo">
+        <div class="logo-icon-wrap">
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+            style="width:100%;height:100%;display:block;">
+            <defs>
+              <linearGradient id="farmigoGrad" x1="0" y1="0" x2="100" y2="100">
+                <stop offset="0%" stop-color="#F5C842" />
+                <stop offset="100%" stop-color="#F07B3A" />
+              </linearGradient>
+            </defs>
+            <rect x="4" y="4" width="92" height="92" rx="24" fill="url(#farmigoGrad)" />
+            <path d="M 48 58 C 30 58 24 42 24 34 C 34 34 48 44 48 58 Z" fill="#0D2015" />
+            <path d="M 52 54 C 52 34 66 22 76 22 C 76 34 64 54 52 54 Z" fill="#0D2015" />
+            <path d="M 50 56 Q 46 66 40 72" stroke="#0D2015" stroke-width="3.5" stroke-linecap="round" fill="none" />
+          </svg>
+        </div>
+        <span class="nav-logo-text">Farm<span class="text-orange">igo</span></span>
+      </a>
+
+      <!-- Nav Links -->
+      <ul class="nav-links">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#categories" class="nav-link">Categories</a></li>
+        <li><a href="#products" class="nav-link">Products</a></li>
+        <li><a href="#features" class="nav-link">Features</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+
+      <!-- Nav Actions -->
+      <div class="nav-actions">
+        <!-- Wishlist -->
+        <button class="nav-icon-btn" id="navWishlistBtn" title="Wishlist" onclick="openWishlist()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+          </svg>
+          <span class="nav-badge" id="wishlistBadge"></span>
+        </button>
+
+        <!-- Cart -->
+        <button class="nav-icon-btn" id="navCartBtn" title="Cart" onclick="openCart()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1" />
+            <circle cx="20" cy="21" r="1" />
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+          </svg>
+          <span class="nav-badge" id="cartBadge"></span>
+        </button>
+
+        <!-- Customer Account -->
+        <div class="nav-account" id="navAccount">
+          <!-- Logged-out state -->
+          <button class="nav-icon-btn" id="navLoginBtn" title="Account" onclick="openAuthModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
+            </svg>
+          </button>
+
+          <!-- Logged-in state (hidden by default) -->
+          <div class="nav-account-btn" id="navUserBtn" style="display:none;" onclick="toggleUserDropdown()">
+            <img src="" alt="Profile" class="nav-account-avatar" id="navUserAvatar" />
+            <span class="nav-account-name" id="navUserName">User</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;">
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </div>
+
+          <div class="nav-dropdown" id="userDropdown">
+            <div class="dropdown-item" onclick="openProfileModal(); toggleUserDropdown();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              My Profile
+            </div>
+            <div class="dropdown-item" onclick="openWishlist(); toggleUserDropdown();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+              Wishlist
+            </div>
+            <div class="dropdown-item" onclick="openCart(); toggleUserDropdown();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+              </svg>
+              My Cart
+            </div>
+            <div class="dropdown-item" onclick="openOrdersDrawer(); toggleUserDropdown();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
+                <rect x="9" y="3" width="6" height="4" rx="1" />
+              </svg>
+              My Orders
+            </div>
+            <div class="dropdown-item" onclick="openCustomerDashboard(); toggleUserDropdown();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" />
+                <rect x="14" y="3" width="7" height="7" />
+                <rect x="14" y="14" width="7" height="7" />
+                <rect x="3" y="14" width="7" height="7" />
+              </svg>
+              Customer Dashboard
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item danger" onclick="logout(); toggleUserDropdown();">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              Logout
+            </div>
+          </div>
+        </div>
+
+        <!-- Farmer Login -->
+        <a href="/farmer-dashboard.html" class="btn-farmer-login" id="farmerLoginBtn">
+          Farmer Portal
+        </a>
+
+        <!-- Hamburger -->
+        <div class="nav-hamburger" onclick="toggleMobileMenu()">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#home" class="nav-link" onclick="closeMobileMenu()">Home</a>
+    <a href="#categories" class="nav-link" onclick="closeMobileMenu()">Categories</a>
+    <a href="#products" class="nav-link" onclick="closeMobileMenu()">Products</a>
+    <a href="#features" class="nav-link" onclick="closeMobileMenu()">Features</a>
+    <a href="#about" class="nav-link" onclick="closeMobileMenu()">About</a>
+    <a href="#contact" class="nav-link" onclick="closeMobileMenu()">Contact</a>
+    <a href="/farmer-dashboard.html" class="btn-farmer-login" style="justify-content:center;margin-top:0.5rem;">Farmer
+      Portal</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     HOME / HERO SECTION (Full Agriculture Background)
+════════════════════════════════════════ -->
+  <section id="home">
+    <div class="hero-container">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Fresh Farm Products<br />
+          Delivered Directly From Farmers
+        </h1>
+
+        <p class="hero-subtitle">
+          Buy premium vegetables, dry fruits, grains, and pulses directly from trusted farmers without middlemen.
+          Experience fresh agricultural products from local farmers.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#products" class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;">
+              <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 0 1-8 0" />
+            </svg>
+            Explore Products
+          </a>
+          <a href="/farmer-dashboard.html" class="btn-outline">
+            Become a Farmer
+          </a>
+        </div>
+
+        <!-- Dynamic Search Bar -->
+        <div class="hero-search">
+          <div class="search-wrapper" style="position: relative;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" class="search-input" id="heroSearchInput" placeholder="Search Products"
+              autocomplete="off" />
+            <button class="search-btn" onclick="heroSearch()">Search</button>
+            <!-- Search Suggestions Dropdown -->
+            <div class="search-suggestions-dropdown" id="searchSuggestionsDropdown"></div>
+          </div>
+          <!-- Stylish Text Chips (No Emojis) -->
+          <div class="popular-searches">
+            <span>Popular:</span>
+            <button class="popular-tag" onclick="searchTag('Potato')">Potato</button>
+            <button class="popular-tag" onclick="searchTag('Onion')">Onion</button>
+            <button class="popular-tag" onclick="searchTag('Apple')">Apple</button>
+            <button class="popular-tag" onclick="searchTag('Rice')">Rice</button>
+            <button class="popular-tag" onclick="searchTag('Groundnuts')">Groundnuts</button>
+            <button class="popular-tag" onclick="searchTag('Orange')">Orange</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     CATEGORIES SECTION (Soft Orange Gradient, Real HD Images)
+════════════════════════════════════════ -->
+  <section id="categories">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">🗂️ Browse by Category</div>
+        <h2 class="section-title">Shop by <span class="orange">Category</span></h2>
+        <p class="section-subtitle">Discover fresh agriculture produce organized by category — all with excellent shelf
+          life and farm-fresh guarantee.</p>
+      </div>
+
+      <!-- 12 Real HD Agriculture Category Cards -->
+      <div class="categories-grid" id="categoriesGrid">
+        <div class="category-card reveal" onclick="filterByCategory('vegetables')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1518977676601-b53f82aba655?auto=format&fit=crop&w=600&q=80"
+              alt="Potato" /></div>
+          <div class="category-name">Potato</div>
+          <div class="category-count">Vegetables</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('vegetables')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?auto=format&fit=crop&w=600&q=80"
+              alt="Onion" /></div>
+          <div class="category-name">Onion</div>
+          <div class="category-count">Vegetables</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('vegetables')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?auto=format&fit=crop&w=600&q=80"
+              alt="Garlic" /></div>
+          <div class="category-name">Garlic</div>
+          <div class="category-count">Vegetables</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('vegetables')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1570586437263-ab629fccc818?auto=format&fit=crop&w=600&q=80"
+              alt="Pumpkin" /></div>
+          <div class="category-name">Pumpkin</div>
+          <div class="category-count">Vegetables</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('vegetables')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?auto=format&fit=crop&w=600&q=80"
+              alt="Carrot" /></div>
+          <div class="category-name">Carrot</div>
+          <div class="category-count">Vegetables</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('fruits')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80"
+              alt="Apple" /></div>
+          <div class="category-name">Apple</div>
+          <div class="category-count">Fruits</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('fruits')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1547514701-42782101795e?auto=format&fit=crop&w=600&q=80"
+              alt="Orange" /></div>
+          <div class="category-name">Orange</div>
+          <div class="category-count">Fruits</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('fruits')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1590502593747-42a996133562?auto=format&fit=crop&w=600&q=80"
+              alt="Lemon" /></div>
+          <div class="category-name">Lemon</div>
+          <div class="category-count">Fruits</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('fruits')">
+          <div class="category-img-wrap"><img src="/images/coconut_hd.png" alt="Coconut" /></div>
+          <div class="category-name">Coconut</div>
+          <div class="category-count">Fruits</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('grains')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1586201375761-83865001e31c?auto=format&fit=crop&w=600&q=80"
+              alt="Rice" /></div>
+          <div class="category-name">Rice</div>
+          <div class="category-count">Grains</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('grains')">
+          <div class="category-img-wrap"><img src="/images/groundnuts_hd.png" alt="Groundnuts" /></div>
+          <div class="category-name">Groundnuts</div>
+          <div class="category-count">Grains</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('grains')">
+          <div class="category-img-wrap"><img
+              src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=600&q=80"
+              alt="Millets" /></div>
+          <div class="category-name">Millets</div>
+          <div class="category-count">Grains</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('Dry Fruits')">
+          <div class="category-img-wrap"><img src="/images/almonds_hd.png" alt="Almonds" /></div>
+          <div class="category-name">Almonds</div>
+          <div class="category-count">Dry Fruits</div>
+        </div>
+        <div class="category-card reveal" onclick="filterByCategory('Dry Fruits')">
+          <div class="category-img-wrap"><img src="/images/cashews_hd.png" alt="Cashews" /></div>
+          <div class="category-name">Cashews</div>
+          <div class="category-count">Dry Fruits</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     PRODUCTS SECTION (Warm Cream Background, Premium Ecommerce Cards)
+════════════════════════════════════════ -->
+  <section id="products">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">🛒 Featured Marketplace</div>
+        <h2 class="section-title">Featured <span class="orange">Farm Arrivals</span></h2>
+        <p class="section-subtitle">Hand-picked seasonal products uploaded directly by verified Indian farmers. Prices
+          update in real time.</p>
+      </div>
+
+      <!-- Toolbar -->
+      <div class="products-toolbar reveal">
+        <div class="products-search-bar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input type="text" class="products-search-input" id="productsSearch" placeholder="Search Products" />
+        </div>
+        <div class="products-filters">
+          <select class="filter-select" id="sortSelect" onchange="applyFilters()">
+            <option value="">Sort: Featured</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="name">A-Z</option>
+          </select>
+          <span class="products-count" id="productsCount">8 products</span>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="category-tabs" id="categoryTabs">
+        <button class="cat-tab active" onclick="filterByCategory('all')" data-cat="all">All Featured</button>
+        <button class="cat-tab" onclick="filterByCategory('Vegetables')" data-cat="Vegetables">Vegetables</button>
+        <button class="cat-tab" onclick="filterByCategory('Fruits')" data-cat="Fruits">Fruits</button>
+        <button class="cat-tab" onclick="filterByCategory('Grains & Rice')" data-cat="Grains & Rice">Grains &
+          Rice</button>
+        <button class="cat-tab" onclick="filterByCategory('Pulses & Dals')" data-cat="Pulses & Dals">Pulses &
+          Dals</button>
+        <button class="cat-tab" onclick="filterByCategory('Dry Fruits')" data-cat="Dry Fruits">Dry Fruits</button>
+        <button class="cat-tab" onclick="filterByCategory('Spices')" data-cat="Spices">Spices</button>
+      </div>
+
+      <!-- Products Grid (Limited Featured Products Initially) -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Loaded dynamically by JS -->
+      </div>
+
+      <!-- View All Products Button -->
+      <div class="view-all-container reveal">
+        <a href="/products.html" class="btn-view-all">
+          <span>View All Products</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     FEATURES SECTION (Light Orange & Glassmorphism)
+════════════════════════════════════════ -->
+  <section id="features">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">⚡ Why Choose Farmigo</div>
+        <h2 class="section-title">Premium <span class="orange">Platform Features</span></h2>
+        <p class="section-subtitle">Experience a state-of-the-art agricultural ecosystem designed for transparency,
+          speed, and fairness.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- Card 1 -->
+        <div class="feature-card reveal">
+          <div>
+            <div class="feature-icon" style="background: rgba(74, 222, 128, 0.12); color: #4ADE80;">🚚</div>
+            <h3 class="feature-title">Direct Farm to Home</h3>
+            <p class="feature-desc">Fresh dry fruits produce delivered straight from farmers to your doorstep within
+              hours.</p>
+          </div>
+          <div class="feature-bottom-label"
+            style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-border); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #4ADE80; font-weight: 700;">
+            <span>⚡ Express Doorstep Delivery</span>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card reveal">
+          <div>
+            <div class="feature-icon" style="background: rgba(245, 200, 66, 0.12); color: #F5C842;">🛡️</div>
+            <h3 class="feature-title">100% Verified Farmers</h3>
+            <p class="feature-desc">Every farmer is KYC-verified and strictly checked for standard farming practices.
+            </p>
+          </div>
+          <div class="feature-bottom-label"
+            style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-border); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #F5C842; font-weight: 700;">
+            <span>✓ Strict Quality Assurance</span>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card reveal">
+          <div>
+            <div class="feature-icon" style="background: rgba(99, 179, 237, 0.12); color: #63B3ED;">🤖</div>
+            <h3 class="feature-title">Smart AI Moderation</h3>
+            <p class="feature-desc">Advanced AI validates product quality and ensures fair market prices for everyone.
+            </p>
+          </div>
+          <div class="feature-bottom-label"
+            style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-border); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #63B3ED; font-weight: 700;">
+            <span>📈 Live Price & Quality Checks</span>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="feature-card reveal">
+          <div>
+            <div class="feature-icon" style="background: rgba(167, 139, 250, 0.12); color: #A78BFA;">🔒</div>
+            <h3 class="feature-title">Instant Secure Payments</h3>
+            <p class="feature-desc">Seamless transactions with UPI, Cards, and Net Banking with instant farmer payouts.
+            </p>
+          </div>
+          <div class="feature-bottom-label"
+            style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-border); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #A78BFA; font-weight: 700;">
+            <span>💳 Bank-Grade Encryption</span>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="feature-card reveal">
+          <div>
+            <div class="feature-icon" style="background: rgba(52, 211, 153, 0.12); color: #34D399;">🤝</div>
+            <h3 class="feature-title">Zero Middlemen Policy</h3>
+            <p class="feature-desc">Farmers earn 100% fair profits while customers save up to 30% on fresh produce.</p>
+          </div>
+          <div class="feature-bottom-label"
+            style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-border); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #34D399; font-weight: 700;">
+            <span>🌾 100% Farmer Earnings</span>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="feature-card reveal">
+          <div>
+            <div class="feature-icon" style="background: rgba(249, 168, 212, 0.12); color: #F9A8D4;">🎧</div>
+            <h3 class="feature-title">Dedicated Support</h3>
+            <p class="feature-desc">Round-the-clock customer and farmer assistance to resolve queries instantly.</p>
+          </div>
+          <div class="feature-bottom-label"
+            style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--lp-border); display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #F9A8D4; font-weight: 700;">
+            <span>💬 24/7 Live Assistance</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     ABOUT / STORY SECTION (Full Agriculture Background)
+════════════════════════════════════════ -->
+  <section id="about">
+    <div class="container">
+      <div class="about-hero-content reveal">
+        <div class="section-tag">🌾 OUR STORY</div>
+        <h2 class="section-title">Empowering Indian Farmers,<br /><span class="orange">Nourishing Families</span></h2>
+        <p class="about-subtitle">
+          Farmigo connects hardworking Indian farmers directly with customers, eliminating unnecessary middlemen to
+          ensure fair opportunities and transparent pricing. Powered by modern technology, we bring fresh agricultural
+          products straight to your family while empowering rural farming communities.
+        </p>
+
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-number" data-target="2500">2,500+</div>
+            <div class="stat-label">Trusted Farmers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="18000">18,000+</div>
+            <div class="stat-label">Happy Customers</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="95000">95,000+</div>
+            <div class="stat-label">Orders Delivered</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number" data-target="100">100+</div>
+            <div class="stat-label">Villages Connected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     CONTACT SECTION (Warm Soft Cream Gradient)
+════════════════════════════════════════ -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-tag">📬 Get In Touch</div>
+        <h2 class="section-title">Contact <span class="orange">Our Team</span></h2>
+        <p class="section-subtitle">Have questions about bulk orders or farmer onboarding? We're here to help anytime.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Info -->
+        <div class="contact-info reveal">
+          <h3>Let's talk about fresh produce</h3>
+          <p>Whether you're a customer looking for fresh produce or a farmer wanting to list your products nationwide,
+            reach out today.</p>
+
+          <a href="tel:+918247589524" class="contact-detail" style="text-decoration:none;color:inherit;cursor:pointer;">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6 19.79 19.79 0 0 1 1.61 5a2 2 0 0 1 1.99-2H6.6a2 2 0 0 1 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.9a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 18.3v-1.38z" />
+              </svg>
+            </div>
+            <div class="contact-detail-text">
+              <strong>PHONE SUPPORT</strong>
+              <span>+91 8247589524</span>
+            </div>
+          </a>
+
+          <a href="mailto:kudayk59@gmail.com" class="contact-detail"
+            style="text-decoration:none;color:inherit;cursor:pointer;">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                <polyline points="22,6 12,13 2,6" />
+              </svg>
+            </div>
+            <div class="contact-detail-text">
+              <strong>EMAIL SUPPORT</strong>
+              <span>kudayk59@gmail.com</span>
+            </div>
+          </a>
+
+          <div class="contact-detail">
+            <div class="contact-detail-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                <circle cx="12" cy="10" r="3" />
+              </svg>
+            </div>
+            <div class="contact-detail-text">
+              <strong>HEADQUARTERS</strong>
+              <span>Guntur, Andhra Pradesh, India</span>
+            </div>
+          </div>
+
+          <div class="social-links">
+            <a href="https://www.facebook.com/farmigo" target="_blank" rel="noopener noreferrer" class="social-link fb"
+              title="Facebook" aria-label="Farmigo Facebook"><svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+              </svg></a>
+            <a href="https://www.instagram.com/farmigo" target="_blank" rel="noopener noreferrer" class="social-link ig"
+              title="Instagram" aria-label="Farmigo Instagram"><svg viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+              </svg></a>
+            <a href="https://www.youtube.com/@farmigo" target="_blank" rel="noopener noreferrer" class="social-link yt"
+              title="YouTube" aria-label="Farmigo YouTube"><svg viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+                <polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+              </svg></a>
+          </div>
+        </div>
+
+        <!-- Form -->
+        <form class="contact-form reveal" id="contactForm" onsubmit="submitContactForm(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Your Full Name *</label>
+              <input type="text" class="form-control" id="contactName" placeholder="Enter your name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Address *</label>
+              <input type="email" class="form-control" id="contactEmail" placeholder="your@email.com" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject *</label>
+            <input type="text" class="form-control" id="contactSubject" placeholder="How can we help you?" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message *</label>
+            <textarea class="form-control" id="contactMessage" rows="4" placeholder="Write your message..."
+              required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Send Message</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <a href="#home" class="nav-logo" style="margin-bottom:1.5rem;display:inline-flex;">
+          <div class="logo-icon-wrap">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="width:100%;height:100%;display:block;">
+              <defs>
+                <linearGradient id="farmigoGrad2" x1="0" y1="0" x2="100" y2="100">
+                  <stop offset="0%" stop-color="#F5C842" />
+                  <stop offset="100%" stop-color="#F07B3A" />
+                </linearGradient>
+              </defs>
+              <rect x="4" y="4" width="92" height="92" rx="24" fill="url(#farmigoGrad2)" />
+              <path d="M 48 58 C 30 58 24 42 24 34 C 34 34 48 44 48 58 Z" fill="#0D2015" />
+              <path d="M 52 54 C 52 34 66 22 76 22 C 76 34 64 54 52 54 Z" fill="#0D2015" />
+              <path d="M 50 56 Q 46 66 40 72" stroke="#0D2015" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            </svg>
+          </div>
+          <span class="nav-logo-text">Farm<span class="text-orange">igo</span></span>
+        </a>
+        <p class="footer-brand-desc">India's leading direct farm-to-door agriculture marketplace. Eliminating middlemen
+          to ensure fair prices for farmers and fresh nutrition for families.</p>
+        <div class="social-links">
+          <a href="#" class="social-link fb"><svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+            </svg></a>
+          <a href="#" class="social-link ig"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="5" />
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+            </svg></a>
+          <a href="#" class="social-link yt"><svg viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z" />
+              <polygon fill="white" points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" />
+            </svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Quick Links</div>
+        <div class="footer-links">
+          <a href="#home" class="footer-link">Home</a>
+          <a href="#categories" class="footer-link">Shop Categories</a>
+          <a href="/products.html" class="footer-link">All Products</a>
+          <a href="#about" class="footer-link">About Us</a>
+          <a href="#contact" class="footer-link">Contact</a>
+          <a href="/admin/login" class="footer-link">Admin Portal</a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Categories</div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="filterByCategory('vegetables')">Vegetables</span>
+          <span class="footer-link" onclick="filterByCategory('fruits')">Fruits</span>
+          <span class="footer-link" onclick="filterByCategory('grains')">Grains & Rice</span>
+          <span class="footer-link" onclick="filterByCategory('pulses')">Pulses</span>
+          <span class="footer-link" onclick="filterByCategory('dry fruits')">Dry Fruits</span>
+          <span class="footer-link" onclick="filterByCategory('spices')">Spices</span>
+        </div>
+      </div>
+      <div>
+        <div class="footer-heading">Support & Portals</div>
+        <div class="footer-links">
+          <span class="footer-link" onclick="openAuthModal()">Customer Login</span>
+          <a href="/farmer-dashboard.html" class="footer-link">Farmer Portal</a>
+          <span class="footer-link">Privacy Policy</span>
+          <span class="footer-link">Terms of Service</span>
+          <span class="footer-link">Shipping Policy</span>
+          <span class="footer-link">Refund Policy</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 <span>Farmigo</span>. All rights reserved. Made with 🧡 for Indian farmers.</div>
+      <div class="footer-copy">🌾 Fresh • 🚜 Direct • 💯 Trusted</div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════
+     AUTH MODAL (Customer Login/Register)
+════════════════════════════════════════ -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="authModalTitle">Welcome to Farmigo</div>
+          <div class="modal-subtitle">Sign in or create an account</div>
+        </div>
+        <button class="modal-close" onclick="closeAuthModal()"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-tabs">
+          <div class="auth-tab active" onclick="switchAuthTab('login')">Login</div>
+          <div class="auth-tab" onclick="switchAuthTab('register')">Register</div>
+        </div>
+
+        <!-- Login Form -->
+        <div class="auth-form active" id="loginForm">
+          <div class="form-group">
+            <label class="form-label">Email or Mobile Number</label>
+            <input type="text" class="form-control" id="loginIdentifier" placeholder="your@email.com or 9876543210" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" />
+          </div>
+          <button class="btn-submit" onclick="loginCustomer()" style="margin-top:0.5rem;">Login →</button>
+          <div style="text-align:center;margin-top:1rem;">
+            <span style="font-size:0.8rem;color:var(--gray-500);">Don't have an account? </span>
+            <span style="font-size:0.8rem;color:var(--orange-600);font-weight:700;cursor:pointer;"
+              onclick="switchAuthTab('register')">Register here</span>
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div class="auth-form" id="registerForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Full Name *</label>
+              <input type="text" class="form-control" id="regName" placeholder="Your full name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone *</label>
+              <input type="tel" class="form-control" id="regPhone" placeholder="10-digit number" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email *</label>
+            <input type="email" class="form-control" id="regEmail" placeholder="your@email.com" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password *</label>
+            <input type="password" class="form-control" id="regPassword" placeholder="Min 6 characters" />
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">City</label>
+              <input type="text" class="form-control" id="regCity" placeholder="Your city" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">State</label>
+              <input type="text" class="form-control" id="regState" placeholder="Your state" />
+            </div>
+          </div>
+          <button class="btn-submit" onclick="registerCustomer()" style="margin-top:0.5rem;">Create Account</button>
+          <div style="text-align:center;margin-top:1rem;">
+            <span style="font-size:0.8rem;color:var(--gray-500);">Already have an account? </span>
+            <span style="font-size:0.8rem;color:var(--orange-600);font-weight:700;cursor:pointer;"
+              onclick="switchAuthTab('login')">Login here</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     PROFILE MODAL
+════════════════════════════════════════ -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">My Profile</div>
+          <div class="modal-subtitle">Manage your account</div>
+        </div>
+        <button class="modal-close" onclick="closeProfileModal()"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+      <div class="modal-body" id="profileModalBody"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     PRODUCT DETAIL MODAL
+════════════════════════════════════════ -->
+  <div class="modal-overlay" id="productModal">
+    <div class="modal" style="max-width:700px;">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" id="productModalTitle">Product Details</div>
+        </div>
+        <button class="modal-close" onclick="closeProductModal()"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+      <div class="modal-body" id="productModalBody"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     CHECKOUT MODAL
+════════════════════════════════════════ -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">Place Your Order</div>
+          <div class="modal-subtitle">Enter delivery details</div>
+        </div>
+        <button class="modal-close" onclick="closeCheckoutModal()"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Delivery Address *</label>
+          <textarea class="form-control" id="checkoutAddress" rows="3"
+            placeholder="Enter full delivery address with pincode"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Payment Method</label>
+          <select class="form-control" id="checkoutPayment">
+            <option value="cod">Cash on Delivery (COD)</option>
+            <option value="online">Online Payment (UPI/Card)</option>
+          </select>
+        </div>
+        <div class="cart-summary" id="checkoutSummary"></div>
+        <button class="btn-submit" onclick="placeOrder()">Place Order</button>
+        <button class="btn-continue" style="margin-top:0.5rem;" onclick="closeCheckoutModal()">Back to Cart</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     ORDER SUCCESS MODAL
+════════════════════════════════════════ -->
+  <div class="modal-overlay" id="orderSuccessModal" style="z-index: 9500;">
+    <div class="modal"
+      style="max-width: 480px; text-align: center; padding: 2.5rem 2rem; border-radius: 20px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 24px 60px rgba(0, 0, 0, 0.15); border: 1px solid rgba(249, 115, 22, 0.2); animation: fdFadeIn 0.4s ease;">
+      <div
+        style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--green-500) 0%, var(--green-700) 100%); color: #fff; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; box-shadow: 0 10px 25px rgba(34, 197, 94, 0.3);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width: 36px; height: 36px;">
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </div>
+      <h3
+        style="font-size: 1.6rem; font-weight: 800; color: var(--gray-900); margin-bottom: 0.75rem; font-family: var(--font-main);">
+        Order Placed Successfully</h3>
+      <p style="font-size: 1.02rem; color: var(--gray-600); line-height: 1.6; margin-bottom: 1.5rem;">Your order has
+        been placed successfully.<br />You can track your order anytime from My Orders.</p>
+      <div
+        style="background: var(--orange-50); border: 1px solid var(--orange-200); border-radius: var(--radius-lg); padding: 0.85rem 1.2rem; font-weight: 700; color: var(--orange-700); font-size: 0.95rem; margin-bottom: 2rem; display: inline-block;"
+        id="successOrderIdDisplay">Order ID: ORD-XXXXXXXX</div>
+      <div style="display: flex; gap: 1rem; flex-direction: column;">
+        <button class="btn-primary"
+          style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem; border-radius: var(--radius-full); box-shadow: 0 4px 14px rgba(249, 115, 22, 0.3);"
+          onclick="closeOrderSuccessModal(); openOrdersDrawer();">View My Orders</button>
+        <button class="btn-continue"
+          style="width: 100%; justify-content: center; padding: 0.85rem; font-size: 1rem; border-radius: var(--radius-full); border: 1.5px solid var(--gray-300); background: transparent; color: var(--gray-700); font-weight: 700; cursor: pointer; transition: var(--transition-fast);"
+          onclick="closeOrderSuccessModal();">Continue Shopping</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     CART DRAWER
+════════════════════════════════════════ -->
+  <div class="drawer-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="drawer" id="cartDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">🛒 My Cart <span id="cartItemCount"
+          style="font-size:0.8rem;color:var(--gray-500);font-weight:500;"></span></div>
+      <button class="drawer-close" onclick="closeCart()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+    <div class="drawer-body" id="cartBody"></div>
+    <div class="drawer-footer" id="cartFooter" style="display:none;">
+      <div class="cart-summary" id="cartSummary"></div>
+      <button class="btn-checkout" onclick="openCheckout()">Proceed to Checkout →</button>
+      <button class="btn-continue" onclick="closeCart()">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     WISHLIST DRAWER
+════════════════════════════════════════ -->
+  <div class="drawer-overlay" id="wishlistOverlay" onclick="closeWishlist()"></div>
+  <div class="drawer" id="wishlistDrawer">
+    <div class="drawer-header">
+      <div class="drawer-title">❤️ My Wishlist</div>
+      <button class="drawer-close" onclick="closeWishlist()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+    <div class="drawer-body" id="wishlistBody"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     ORDERS DRAWER
+════════════════════════════════════════ -->
+  <div class="drawer-overlay" id="ordersOverlay" onclick="closeOrdersDrawer()"></div>
+  <div class="drawer" id="ordersDrawer" style="max-width:580px;">
+    <div class="drawer-header">
+      <div class="drawer-title">📦 My Orders</div>
+      <button class="drawer-close" onclick="closeOrdersDrawer()"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg></button>
+    </div>
+    <div class="drawer-body" id="ordersBody"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     AI VOICE ASSISTANT (Orange Brand UI)
+════════════════════════════════════════ -->
+  <div class="voice-fab">
+    <div class="voice-panel" id="voicePanel">
+      <div class="voice-panel-header">
+        <div class="voice-header-left">
+          <div class="voice-logo-sm">
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
+              style="width: 100%; height: 100%; display: block;">
+              <defs>
+                <linearGradient id="farmigoGrad" x1="0" y1="0" x2="100" y2="100">
+                  <stop offset="0%" stop-color="#FF9800" />
+                  <stop offset="100%" stop-color="#F57C00" />
+                </linearGradient>
+                <filter id="shadow" x="0" y="0" width="100" height="100">
+                  <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15" />
+                </filter>
+              </defs>
+              <rect x="4" y="4" width="92" height="92" rx="28" fill="url(#farmigoGrad)" filter="url(#shadow)" />
+              <path d="M 48 58 C 30 58 24 42 24 34 C 34 34 48 44 48 58 Z" fill="#FFFFFF" />
+              <path d="M 52 54 C 52 34 66 22 76 22 C 76 34 64 54 52 54 Z" fill="#FFFFFF" />
+              <path d="M 50 56 Q 46 66 40 72" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none" />
+            </svg>
+          </div>
+          <div>
+            <div class="voice-panel-title">Farmigo Assistant</div>
+            <div class="voice-panel-sub">AI Voice Powered</div>
+          </div>
+        </div>
+        <select class="voice-lang-select" id="voiceLang" onchange="setVoiceLang()">
+          <option value="en-IN">English</option>
+          <option value="te-IN">Telugu</option>
+          <option value="hi-IN">Hindi</option>
+        </select>
+      </div>
+
+      <div class="voice-chat" id="voiceChat"></div>
+
+      <div class="voice-visualizer" id="voiceVisualizer">
+        <div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+        <div class="voice-bar"></div>
+      </div>
+
+      <div class="voice-controls">
+        <button class="voice-mic-main" id="voiceMicMain" onclick="toggleListening()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+            <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+            <line x1="12" y1="19" x2="12" y2="23" />
+            <line x1="8" y1="23" x2="16" y2="23" />
+          </svg>
+        </button>
+        <div class="voice-status-text" id="voiceStatusText">Click mic to speak</div>
+        <button class="voice-close-panel" onclick="closeVoicePanel()"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg></button>
+      </div>
+    </div>
+
+    <button class="voice-fab-btn" id="voiceFabBtn" onclick="toggleVoicePanel()" title="AI Voice Assistant">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" />
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+        <line x1="12" y1="19" x2="12" y2="23" />
+        <line x1="8" y1="23" x2="16" y2="23" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+     PREMIUM LOGOUT CONFIRMATION MODAL
+════════════════════════════════════════ -->
+  <div class="logout-modal-overlay" id="logoutConfirmModal"
+    onclick="if(event.target === this) closeLogoutConfirmModal()">
+    <div class="logout-modal-card">
+      <div
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: linear-gradient(90deg, #2E7D32, #FF9800, #EF4444);">
+      </div>
+      <div
+        style="width: 68px; height: 68px; border-radius: 50%; background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.4); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.3rem auto; box-shadow: 0 8px 20px rgba(239, 68, 68, 0.25);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2.2" stroke-linecap="round"
+          stroke-linejoin="round" style="width: 32px; height: 32px; transform: translateX(2px);">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+          <polyline points="16 17 21 12 16 7"></polyline>
+          <line x1="21" y1="12" x2="9" y2="12"></line>
+        </svg>
+      </div>
+      <h3
+        style="font-family: 'Poppins', 'Inter', sans-serif; font-size: 1.6rem; font-weight: 800; color: #fff; margin: 0 0 0.8rem 0; letter-spacing: -0.5px;">
+        Sign Out</h3>
+      <p style="font-size: 0.98rem; color: #CBD5E1; line-height: 1.6; margin: 0 0 1.8rem 0; font-weight: 400;">
+        Are you sure you want to log out of your Farmigo account?<br><br>
+        <span
+          style="color: #FFB74D; font-weight: 600; font-size: 0.92rem; background: rgba(255, 152, 0, 0.12); padding: 0.35rem 0.8rem; border-radius: 8px; display: inline-block;">
+          ⚠️ You will need to sign in again to access your dashboard.
+        </span>
+      </p>
+      <div style="display: flex; gap: 1rem; align-items: center; justify-content: center;">
+        <button type="button" class="btn-logout-cancel" id="btnCancelLogout" onclick="closeLogoutConfirmModal()"
+          style="flex: 1; padding: 0.85rem 1.2rem; border-radius: 14px; border: none; background: #334155; color: #F8FAFC; font-size: 0.98rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
+          Cancel
+        </button>
+        <button type="button" class="btn-logout-confirm" id="btnConfirmLogout" onclick="performLogout()"
+          style="flex: 1; padding: 0.85rem 1.2rem; border-radius: 14px; border: none; background: linear-gradient(135deg, #FF5722 0%, #DC2626 100%); color: #ffffff; font-size: 0.98rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4); display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round" style="width: 18px; height: 18px;">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+
+</html>

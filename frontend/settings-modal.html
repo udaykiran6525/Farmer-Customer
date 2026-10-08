@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Farmigo – Farmer Portal & Dashboard</title>
+  <meta name="description" content="Farmigo Farmer Portal – Manage your crops, orders, and farm profile in one premium dashboard." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="public/favicon.svg" />
+</head>
+<body class="fd-body">
+
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     FARMER AUTH MODAL
+═══════════════════════════════════════════════════════════ -->
+<div class="fd-auth-overlay open" id="farmerAuthModal">
+  <div class="fd-auth-card">
+
+    <!-- Auth Brand -->
+    <div class="fd-auth-brand">
+      <div class="fd-auth-logo" style="width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; display: block;">
+  <defs>
+    <linearGradient id="farmigoGrad" x1="0" y1="0" x2="100" y2="100">
+      <stop offset="0%" stop-color="#FF9800"/>
+      <stop offset="100%" stop-color="#F57C00"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="100" height="100">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect x="4" y="4" width="92" height="92" rx="28" fill="url(#farmigoGrad)" filter="url(#shadow)"/>
+  <path d="M 48 58 C 30 58 24 42 24 34 C 34 34 48 44 48 58 Z" fill="#FFFFFF"/>
+  <path d="M 52 54 C 52 34 66 22 76 22 C 76 34 64 54 52 54 Z" fill="#FFFFFF"/>
+  <path d="M 50 56 Q 46 66 40 72" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+</svg>
+      </div>
+      <div>
+        <div class="fd-auth-title">Farmigo Farmer Portal</div>
+        <div class="fd-auth-sub">Manage your crops, orders & earnings</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="fd-auth-tabs">
+      <div class="fd-auth-tab active" onclick="switchFarmerTab('login')" id="tab-login">🔐 Farmer Login</div>
+      <div class="fd-auth-tab" onclick="switchFarmerTab('register')" id="tab-register">🌱 New Registration</div>
+    </div>
+
+    <!-- Login Form -->
+    <div class="fd-auth-form active" id="farmerLoginForm">
+      <div class="fd-form-group">
+        <label class="fd-label">Email or Phone Number</label>
+        <div class="fd-input-wrap">
+          <span class="material-icons-round fd-input-icon">person</span>
+          <input type="text" class="fd-input" id="fLoginId" placeholder="email@example.com or 9876543210" />
+        </div>
+      </div>
+      <div class="fd-form-group">
+        <label class="fd-label">Password</label>
+        <div class="fd-input-wrap">
+          <span class="material-icons-round fd-input-icon">lock</span>
+          <input type="password" class="fd-input" id="fLoginPassword" placeholder="Enter your password" />
+        </div>
+      </div>
+      <button class="fd-btn-primary" onclick="loginFarmer()" style="width:100%;margin-top:0.5rem;">
+        <span class="material-icons-round">login</span> Login to Dashboard
+      </button>
+      <div class="fd-auth-footer">
+        <span>New Farmer? </span>
+        <span class="fd-auth-link" onclick="switchFarmerTab('register')">Register here →</span>
+      </div>
+      <div class="fd-auth-footer" style="margin-top:0.5rem;">
+        <a href="/" class="fd-auth-link" style="color:#9CA3AF;">← Back to Customer Marketplace</a>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div class="fd-auth-form" id="farmerRegisterForm">
+      <div class="fd-form-row">
+        <div class="fd-form-group">
+          <label class="fd-label">Farmer Name *</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">badge</span>
+            <input type="text" class="fd-input" id="fRegName" placeholder="Full name" />
+          </div>
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label">Mobile Number *</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">phone</span>
+            <input type="tel" class="fd-input" id="fRegPhone" placeholder="10-digit number" />
+          </div>
+        </div>
+      </div>
+      <div class="fd-form-row">
+        <div class="fd-form-group">
+          <label class="fd-label">Email *</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">email</span>
+            <input type="email" class="fd-input" id="fRegEmail" placeholder="your@email.com" />
+          </div>
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label">Password *</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">lock</span>
+            <input type="password" class="fd-input" id="fRegPassword" placeholder="Min 6 characters" />
+          </div>
+        </div>
+      </div>
+      <div class="fd-form-row">
+        <div class="fd-form-group">
+          <label class="fd-label">Farm Name</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">agriculture</span>
+            <input type="text" class="fd-input" id="fRegFarmName" placeholder="e.g. Green Valley Farm" />
+          </div>
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label">Farm Size</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">landscape</span>
+            <input type="text" class="fd-input" id="fRegFarmSize" placeholder="e.g. 5 Acres" />
+          </div>
+        </div>
+      </div>
+      <div class="fd-form-row">
+        <div class="fd-form-group">
+          <label class="fd-label">Village / Town *</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">location_city</span>
+            <input type="text" class="fd-input" id="fRegVillage" placeholder="Village name" />
+          </div>
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label">District *</label>
+          <div class="fd-input-wrap">
+            <span class="material-icons-round fd-input-icon">map</span>
+            <input type="text" class="fd-input" id="fRegDistrict" placeholder="District name" />
+          </div>
+        </div>
+      </div>
+      <div class="fd-form-group">
+        <label class="fd-label">State *</label>
+        <div class="fd-input-wrap">
+          <span class="material-icons-round fd-input-icon">public</span>
+          <input type="text" class="fd-input" id="fRegState" placeholder="e.g. Telangana, Andhra Pradesh" />
+        </div>
+      </div>
+      <button class="fd-btn-primary" onclick="registerFarmer()" style="width:100%;margin-top:0.5rem;">
+        <span class="material-icons-round">how_to_reg</span> Create Farmer Account
+      </button>
+      <div class="fd-auth-footer">
+        <span>Already registered? </span>
+        <span class="fd-auth-link" onclick="switchFarmerTab('login')">Login here →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN DASHBOARD LAYOUT
+═══════════════════════════════════════════════════════════ -->
+<div class="fd-layout" id="dashboardLayout" style="display:none;">
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="fd-sidebar" id="sidebar">
+    <div class="fd-sidebar-brand">
+      <div class="fd-sidebar-logo-wrap" style="width: 42px; height: 42px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; display: block;">
+  <defs>
+    <linearGradient id="farmigoGrad" x1="0" y1="0" x2="100" y2="100">
+      <stop offset="0%" stop-color="#FF9800"/>
+      <stop offset="100%" stop-color="#F57C00"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="100" height="100">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  <rect x="4" y="4" width="92" height="92" rx="28" fill="url(#farmigoGrad)" filter="url(#shadow)"/>
+  <path d="M 48 58 C 30 58 24 42 24 34 C 34 34 48 44 48 58 Z" fill="#FFFFFF"/>
+  <path d="M 52 54 C 52 34 66 22 76 22 C 76 34 64 54 52 54 Z" fill="#FFFFFF"/>
+  <path d="M 50 56 Q 46 66 40 72" stroke="#FFFFFF" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+</svg>
+      </div>
+      <div class="fd-sidebar-brand-text">
+        <div class="fd-sidebar-name" style="font-weight: 800; font-family: 'Poppins', sans-serif; letter-spacing: -0.5px; font-size: 1.45rem; margin-left: 8px; display: flex; align-items: center; line-height: 1;"><span style="color: #2E7D32;">Farm</span><span style="color: #F57C00;">igo</span></div>
+        <div class="fd-sidebar-badge">FARMER PORTAL</div>
+      </div>
+    </div>
+
+    <div class="fd-sidebar-farmer-info" id="sidebarFarmerInfo">
+      <img src="https://ui-avatars.com/api/?name=Farmer&background=388E3C&color=fff&size=64" alt="Farmer" class="fd-sidebar-avatar" id="sidebarAvatar" />
+      <div>
+        <div class="fd-sidebar-farmer-name" id="sidebarFarmerName">Loading...</div>
+        <div class="fd-sidebar-farmer-farm" id="sidebarFarmerFarm">Farm Portal</div>
+      </div>
+    </div>
+
+    <div class="fd-sidebar-section-label">Main Menu</div>
+    <nav class="fd-sidebar-nav">
+      <div class="fd-nav-item active" onclick="switchNav('overview')" id="nav-overview">
+        <span class="material-icons-round fd-nav-icon">dashboard</span>
+        <span class="fd-nav-label">Overview</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+      <div class="fd-nav-item" onclick="switchNav('products')" id="nav-products">
+        <span class="material-icons-round fd-nav-icon">inventory_2</span>
+        <span class="fd-nav-label">My Products</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+      <div class="fd-nav-item" onclick="switchNav('orders')" id="nav-orders">
+        <span class="material-icons-round fd-nav-icon">receipt_long</span>
+        <span class="fd-nav-label">Customer Orders</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+      <div class="fd-nav-item" onclick="switchNav('analytics')" id="nav-analytics">
+        <span class="material-icons-round fd-nav-icon">bar_chart</span>
+        <span class="fd-nav-label">Analytics</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+      <div class="fd-nav-item" onclick="switchNav('predictor')" id="nav-predictor">
+        <span class="material-icons-round fd-nav-icon">trending_up</span>
+        <span class="fd-nav-label">Demand Predictor</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+
+      <div class="fd-nav-item" onclick="switchNav('schemes')" id="nav-schemes">
+        <span class="material-icons-round fd-nav-icon">account_balance</span>
+        <span class="fd-nav-label">Government Schemes</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+
+      <div class="fd-sidebar-section-label" style="margin-top:1.5rem;">Account</div>
+      <div class="fd-nav-item" onclick="switchNav('profile')" id="nav-profile">
+        <span class="material-icons-round fd-nav-icon">account_circle</span>
+        <span class="fd-nav-label">Profile</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+      <div class="fd-nav-item" onclick="switchNav('settings')" id="nav-settings">
+        <span class="material-icons-round fd-nav-icon">settings</span>
+        <span class="fd-nav-label">Settings</span>
+        <div class="fd-nav-active-bar"></div>
+      </div>
+
+      <div class="fd-sidebar-section-label" style="margin-top:1.5rem;">Links</div>
+      <a href="/" class="fd-nav-item" style="text-decoration:none;">
+        <span class="material-icons-round fd-nav-icon">storefront</span>
+        <span class="fd-nav-label">Customer Marketplace</span>
+        <div class="fd-nav-active-bar"></div>
+      </a>
+    </nav>
+
+    <div class="fd-sidebar-logout" onclick="logoutFarmer()">
+      <span class="material-icons-round" style="font-size:1.2rem;">logout</span>
+      <span>Logout</span>
+    </div>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <div class="fd-main">
+
+    <!-- ═══ TOP HEADER ═══ -->
+    <header class="fd-header">
+      <div class="fd-header-left">
+        <button class="fd-hamburger" onclick="toggleSidebar()" id="hamburgerBtn" aria-label="Toggle sidebar">
+          <span class="material-icons-round">menu</span>
+        </button>
+        <div class="fd-header-greeting">
+          <div class="fd-header-welcome" id="headerWelcome">Good morning, Farmer! 🌾</div>
+          <div class="fd-header-date" id="headerDate"></div>
+        </div>
+      </div>
+      <div class="fd-header-center">
+        <div class="fd-search-wrap">
+          <span class="material-icons-round fd-search-icon">search</span>
+          <input type="text" class="fd-search" placeholder="Search products, orders…" id="dashboardSearch" />
+        </div>
+      </div>
+      <div class="fd-header-right">
+        <div class="fd-header-lang-toggle" style="margin-right:1rem;">
+          <select id="globalLangToggle" onchange="changeLanguage(this.value)" style="border: 1px solid var(--gray-200); border-radius: 8px; padding: 0.4rem 0.6rem; background: var(--white); font-weight: 600; color: var(--green-700); cursor: pointer; outline:none;">
+            <option value="en">EN</option>
+            <option value="te">తెలుగు</option>
+          </select>
+        </div>
+        <div class="fd-weather-chip" id="weatherChip">
+          <span class="material-icons-round" style="font-size:1.1rem;color:#FB8C00;">wb_sunny</span>
+          <span id="weatherChipText">Loading…</span>
+        </div>
+        <div class="fd-header-icon-btn" title="Notifications" onclick="showNotifications()">
+          <span class="material-icons-round">notifications</span>
+          <span class="fd-notif-dot" id="notifDot"></span>
+        </div>
+        <div class="fd-header-avatar-wrap" onclick="switchNav('profile')">
+          <img src="https://ui-avatars.com/api/?name=Farmer&background=2E7D32&color=fff&size=64" alt="Profile" class="fd-header-avatar" id="headerAvatar" />
+        </div>
+      </div>
+    </header>
+
+    <!-- Page Title Bar -->
+    <div class="fd-page-bar">
+      <div>
+        <h1 class="fd-page-title" id="pageTitle">Overview</h1>
+        <p class="fd-page-sub" id="pageSubtitle">Welcome back – check your farm's performance today</p>
+      </div>
+    </div>
+
+    <!-- ═══ SECTIONS ═══ -->
+    <div class="fd-sections">
+
+      <!-- ──────────────────────────────────────
+           1. OVERVIEW
+      ────────────────────────────────────── -->
+      <div id="sec-overview" class="nav-section">
+
+        <!-- Stat Cards -->
+        <div class="fd-stats-grid">
+          <div class="fd-stat-card fd-stat-green">
+            <div class="fd-stat-icon-wrap"><span class="material-icons-round">inventory_2</span></div>
+            <div class="fd-stat-num" id="stat-products">0</div>
+            <div class="fd-stat-label">Total Products</div>
+            <div class="fd-stat-trend">↑ Live on marketplace</div>
+          </div>
+          <div class="fd-stat-card fd-stat-teal">
+            <div class="fd-stat-icon-wrap"><span class="material-icons-round">check_circle</span></div>
+            <div class="fd-stat-num" id="stat-active">0</div>
+            <div class="fd-stat-label">Active / Available</div>
+            <div class="fd-stat-trend">↑ Currently listed</div>
+          </div>
+          <div class="fd-stat-card fd-stat-orange">
+            <div class="fd-stat-icon-wrap"><span class="material-icons-round">shopping_cart</span></div>
+            <div class="fd-stat-num" id="stat-orders">0</div>
+            <div class="fd-stat-label">Total Orders</div>
+            <div class="fd-stat-trend">↑ All time received</div>
+          </div>
+          <div class="fd-stat-card fd-stat-amber">
+            <div class="fd-stat-icon-wrap"><span class="material-icons-round">currency_rupee</span></div>
+            <div class="fd-stat-num" id="stat-revenue">₹0</div>
+            <div class="fd-stat-label">Total Revenue</div>
+            <div class="fd-stat-trend">↑ Generated so far</div>
+          </div>
+          <div class="fd-stat-card fd-stat-indigo">
+            <div class="fd-stat-icon-wrap"><span class="material-icons-round">pending_actions</span></div>
+            <div class="fd-stat-num" id="stat-pending">0</div>
+            <div class="fd-stat-label">Pending Orders</div>
+            <div class="fd-stat-trend">Awaiting action</div>
+          </div>
+          <div class="fd-stat-card fd-stat-rose">
+            <div class="fd-stat-icon-wrap"><span class="material-icons-round">local_shipping</span></div>
+            <div class="fd-stat-num" id="stat-delivered">0</div>
+            <div class="fd-stat-label">Delivered Orders</div>
+            <div class="fd-stat-trend">Completed this month</div>
+          </div>
+        </div>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             AI FARM HEALTH SCORE SECTION
+        ═══════════════════════════════════════════════════════════ -->
+        <div class="fd-health-section" id="aiFarmHealthSection" style="margin-top:2rem;">
+          
+          <!-- Top Row: Score Card & AI Recommendations -->
+          <div class="fd-health-top-grid">
+            
+            <!-- Left: Circular Health Score -->
+            <div class="fd-health-card fd-score-card">
+              <div class="fd-health-card-header">
+                <div class="fd-health-title">
+                  <span class="material-icons-round" style="color:#2E7D32;">analytics</span>
+                  AI Farm Health Score
+                </div>
+                <span class="fd-health-badge" id="healthScoreStatusBadge">🟢 Excellent</span>
+              </div>
+              
+              <div class="fd-score-circle-wrap">
+                <svg class="fd-score-svg" viewBox="0 0 160 160">
+                  <circle class="fd-score-bg" cx="80" cy="80" r="65"></circle>
+                  <circle class="fd-score-progress" id="healthScoreRing" cx="80" cy="80" r="65" stroke-dasharray="408.4" stroke-dashoffset="408.4"></circle>
+                </svg>
+                <div class="fd-score-center">
+                  <div class="fd-score-val" id="healthScoreNum">0</div>
+                  <div class="fd-score-max">/ 100</div>
+                </div>
+              </div>
+              
+              <div class="fd-score-sub" style="font-weight:800;font-size:1.1rem;color:var(--fd-text-dark);margin-top:0.5rem;letter-spacing:-0.3px;">Overall Farm Performance</div>
+              <div class="fd-score-sub" id="healthScoreStatusText" style="margin-top:0.25rem;color:#64748B;font-weight:600;">Analyzing farm data...</div>
+              <div class="fd-score-ai-time" id="healthScoreUpdatedTime" style="margin-top:1.25rem;font-size:0.8rem;color:#475569;font-weight:600;display:flex;align-items:center;justify-content:center;gap:0.4rem;background:rgba(226,232,240,0.6);padding:0.45rem 0.9rem;border-radius:20px;border:1px solid rgba(203,213,225,0.6);">
+                <span class="material-icons-round" style="font-size:0.95rem;color:#2E7D32;">auto_awesome</span>
+                AI Updated | Last Updated: Just Now
+              </div>
+            </div>
+            
+            <!-- Right: AI Recommendations -->
+            <div class="fd-health-card fd-rec-card">
+              <div class="fd-health-card-header">
+                <div class="fd-health-title">
+                  <span class="material-icons-round" style="color:#F57C00;">smart_toy</span>
+                  🤖 AI Recommendations (Real-Time)
+                </div>
+                <span class="fd-badge-orange" id="aiRecCategoryBadge" style="font-weight:700;">Live Feed</span>
+              </div>
+              <div class="fd-rec-list" id="aiRecommendationsList">
+                <div class="fd-rec-loading">
+                  <span class="material-icons-round fd-spin">sync</span>
+                  Analyzing inventory, profile, and customer orders...
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Middle Row: Performance Breakdown (5 Cards) -->
+          <div class="fd-health-breakdown-title" style="margin-top:2rem;margin-bottom:1rem;font-weight:800;font-size:1.15rem;color:var(--fd-text-dark);display:flex;align-items:center;gap:0.5rem;">
+            <span class="material-icons-round" style="color:#2E7D32;">tune</span>
+            Performance Breakdown
+          </div>
+          <div class="fd-breakdown-grid">
+            
+            <!-- 1. Product Quality -->
+            <div class="fd-health-card fd-breakdown-card">
+              <div class="fd-bd-header">
+                <div class="fd-bd-icon-wrap" style="background:rgba(46,125,50,0.12);color:#2E7D32;"><span class="material-icons-round">verified</span></div>
+                <span class="fd-bd-status" id="bdStatusQuality">Excellent</span>
+              </div>
+              <div class="fd-bd-title">Product Quality</div>
+              <div class="fd-bd-val" id="bdValQuality">--%</div>
+              <div class="fd-bd-bar-track">
+                <div class="fd-bd-bar-fill" id="bdBarQuality" style="width:0%;background:#2E7D32;"></div>
+              </div>
+              <div class="fd-bd-sub">Images, desc & pricing</div>
+            </div>
+            
+            <!-- 2. Stock Health -->
+            <div class="fd-health-card fd-breakdown-card">
+              <div class="fd-bd-header">
+                <div class="fd-bd-icon-wrap" style="background:rgba(245,124,0,0.12);color:#F57C00;"><span class="material-icons-round">inventory</span></div>
+                <span class="fd-bd-status" id="bdStatusStock">Good</span>
+              </div>
+              <div class="fd-bd-title">Stock Health</div>
+              <div class="fd-bd-val" id="bdValStock">--%</div>
+              <div class="fd-bd-bar-track">
+                <div class="fd-bd-bar-fill" id="bdBarStock" style="width:0%;background:#F57C00;"></div>
+              </div>
+              <div class="fd-bd-sub">Inventory & stockouts</div>
+            </div>
+            
+            <!-- 3. Customer Ratings -->
+            <div class="fd-health-card fd-breakdown-card">
+              <div class="fd-bd-header">
+                <div class="fd-bd-icon-wrap" style="background:rgba(255,193,7,0.15);color:#FFA000;"><span class="material-icons-round">star</span></div>
+                <span class="fd-bd-status" id="bdStatusRating">Excellent</span>
+              </div>
+              <div class="fd-bd-title">Customer Ratings</div>
+              <div class="fd-bd-val" id="bdValRating">-- ⭐</div>
+              <div class="fd-bd-bar-track">
+                <div class="fd-bd-bar-fill" id="bdBarRating" style="width:0%;background:#FFA000;"></div>
+              </div>
+              <div class="fd-bd-sub" id="bdSubRating">Score: --%</div>
+            </div>
+            
+            <!-- 4. Delivery Performance -->
+            <div class="fd-health-card fd-breakdown-card">
+              <div class="fd-bd-header">
+                <div class="fd-bd-icon-wrap" style="background:rgba(33,150,243,0.12);color:#1E88E5;"><span class="material-icons-round">local_shipping</span></div>
+                <span class="fd-bd-status" id="bdStatusDelivery">Excellent</span>
+              </div>
+              <div class="fd-bd-title">Delivery Performance</div>
+              <div class="fd-bd-val" id="bdValDelivery">--%</div>
+              <div class="fd-bd-bar-track">
+                <div class="fd-bd-bar-fill" id="bdBarDelivery" style="width:0%;background:#1E88E5;"></div>
+              </div>
+              <div class="fd-bd-sub">Fulfilled vs delayed</div>
+            </div>
+            
+            <!-- 5. Profile Completion -->
+            <div class="fd-health-card fd-breakdown-card">
+              <div class="fd-bd-header">
+                <div class="fd-bd-icon-wrap" style="background:rgba(156,39,176,0.12);color:#8E24AA;"><span class="material-icons-round">account_circle</span></div>
+                <span class="fd-bd-status" id="bdStatusProfile">Perfect</span>
+              </div>
+              <div class="fd-bd-title">Profile Completion</div>
+              <div class="fd-bd-val" id="bdValProfile">--%</div>
+              <div class="fd-bd-bar-track">
+                <div class="fd-bd-bar-fill" id="bdBarProfile" style="width:0%;background:#8E24AA;"></div>
+              </div>
+              <div class="fd-bd-sub">Photo, address & bank</div>
+            </div>
+          </div>
+          
+          <!-- Lower Row: Weekly Trend Chart & Next Week Prediction -->
+          <div class="fd-health-lower-grid" style="margin-top:2rem;">
+            
+            <!-- Left: Weekly Trend Chart -->
+            <div class="fd-health-card fd-trend-card">
+              <div class="fd-health-card-header" style="flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;">
+                <div>
+                  <div class="fd-health-title" style="font-size:1.15rem;margin-bottom:0.2rem;">
+                    <span class="material-icons-round" style="color:#2E7D32;font-size:1.4rem;">analytics</span>
+                    Weekly Trend (Last 7 Days)
+                  </div>
+                  <div style="font-size:0.8rem;color:#64748B;">Real-time platform analytics & customer activity monitoring</div>
+                </div>
+                <div class="fd-trend-tabs" style="display:flex;gap:0.35rem;background:#E2E8F0;padding:0.3rem;border-radius:12px;box-shadow:inset 0 1px 3px rgba(0,0,0,0.05);">
+                  <button class="fd-trend-tab active" onclick="switchTrendTab('orders')" id="trendTab-orders">Orders</button>
+                  <button class="fd-trend-tab" onclick="switchTrendTab('revenue')" id="trendTab-revenue">Revenue</button>
+                  <button class="fd-trend-tab" onclick="switchTrendTab('visitors')" id="trendTab-visitors">Visitors</button>
+                  <button class="fd-trend-tab" onclick="switchTrendTab('productsSold')" id="trendTab-productsSold">Products Sold</button>
+                </div>
+              </div>
+
+              <!-- Professional Summary Stat Bar (AWS/Google Analytics Style) -->
+              <div id="trendSummaryBar" style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1.25rem;padding:0.85rem 1.25rem;background:rgba(255,255,255,0.75);border:1px solid rgba(0,0,0,0.06);border-radius:14px;box-shadow:0 4px 15px rgba(0,0,0,0.02);align-items:center;justify-content:space-around;">
+                <div style="flex:1;min-width:110px;text-align:center;">
+                  <span style="font-size:0.75rem;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">7-Day Total</span>
+                  <div id="sumTotalVal" style="font-size:1.35rem;font-weight:800;color:#1E293B;margin-top:0.15rem;">--</div>
+                </div>
+                <div style="width:1px;height:35px;background:#E2E8F0;"></div>
+                <div style="flex:1;min-width:110px;text-align:center;">
+                  <span style="font-size:0.75rem;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Daily Average</span>
+                  <div id="sumAvgVal" style="font-size:1.35rem;font-weight:800;color:#1E293B;margin-top:0.15rem;">--</div>
+                </div>
+                <div style="width:1px;height:35px;background:#E2E8F0;"></div>
+                <div style="flex:1;min-width:110px;text-align:center;">
+                  <span style="font-size:0.75rem;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Peak Day</span>
+                  <div id="sumPeakVal" style="font-size:1.35rem;font-weight:800;color:#2E7D32;margin-top:0.15rem;">--</div>
+                </div>
+                <div style="width:1px;height:35px;background:#E2E8F0;"></div>
+                <div style="flex:1;min-width:110px;text-align:center;">
+                  <span style="font-size:0.75rem;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Trend Status</span>
+                  <div id="sumTrendStatus" style="font-size:0.9rem;font-weight:700;color:#10B981;margin-top:0.35rem;display:inline-flex;align-items:center;gap:0.25rem;background:#D1FAE5;padding:0.2rem 0.65rem;border-radius:20px;">↗ +14% Strong</div>
+                </div>
+              </div>
+
+              <!-- Chart Area (Occupies 90-95% width, 400px height, zero unused space) -->
+              <div class="fd-trend-chart-wrap" id="weeklyTrendChartWrap" style="position:relative;margin-top:1.25rem;width:100%;min-height:400px;display:flex;align-items:center;justify-content:center;">
+                <svg class="fd-trend-svg" id="weeklyTrendSvg" style="width:100%;height:400px;overflow:visible;">
+                  <defs>
+                    <linearGradient id="trendGradientGreen" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#4CAF50" stop-opacity="0.45"/>
+                      <stop offset="65%" stop-color="#2E7D32" stop-opacity="0.15"/>
+                      <stop offset="100%" stop-color="#2E7D32" stop-opacity="0.0"/>
+                    </linearGradient>
+                    <linearGradient id="trendGradientOrange" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="#FF9800" stop-opacity="0.45"/>
+                      <stop offset="65%" stop-color="#F57C00" stop-opacity="0.15"/>
+                      <stop offset="100%" stop-color="#F57C00" stop-opacity="0.0"/>
+                    </linearGradient>
+                  </defs>
+                  <!-- Dynamically rendered Grid Lines, Area, Path, Points & Axis Labels -->
+                  <g id="trendGridLinesGroup"></g>
+                  <g id="trendYAxisGroup"></g>
+                  <path d="" fill="url(#trendGradientGreen)" id="trendAreaPath" style="transition:all 0.6s cubic-bezier(0.4, 0, 0.2, 1);"/>
+                  <path d="" fill="none" stroke="#2E7D32" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" id="trendLinePath" style="transition:all 0.6s cubic-bezier(0.4, 0, 0.2, 1);"/>
+                  <g id="trendXAxisGroup"></g>
+                  <g id="trendPointsGroup"></g>
+                </svg>
+                
+                <!-- Professional Interactive Hover Tooltip -->
+                <div id="trendHoverTooltip" class="fd-trend-tooltip" style="display:none;position:absolute;top:0;left:0;pointer-events:none;background:rgba(15, 23, 42, 0.95);backdrop-filter:blur(10px);color:#F8FAFC;padding:0.75rem 1rem;border-radius:12px;border:1px solid rgba(255,255,255,0.15);font-size:0.85rem;box-shadow:0 20px 35px rgba(0,0,0,0.35);z-index:30;white-space:nowrap;transition:top 0.1s ease, left 0.1s ease;">
+                  <div id="tooltipDay" style="font-size:0.78rem;font-weight:700;color:#38BDF8;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:0.2rem;">Mon</div>
+                  <div id="tooltipVal" style="font-size:1.3rem;font-weight:800;color:#FFFFFF;margin-bottom:0.2rem;">0</div>
+                  <div id="tooltipSub" style="font-size:0.75rem;font-weight:600;color:#A7F3D0;display:flex;align-items:center;gap:0.25rem;">● Real-time Activity</div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Right: Next Week Prediction -->
+            <div class="fd-health-card fd-predict-card">
+              <div class="fd-health-card-header">
+                <div class="fd-health-title">
+                  <span class="material-icons-round" style="color:#F57C00;">batch_prediction</span>
+                  Next Week Prediction
+                </div>
+                <span class="fd-badge-orange" id="predictionProbBadge" style="font-weight:700;">High Confidence</span>
+              </div>
+              <div class="fd-predict-main" style="display:flex;justify-content:space-between;align-items:center;background:rgba(245,124,0,0.08);padding:1.25rem;border-radius:16px;border:1px solid rgba(245,124,0,0.2);margin-top:1rem;">
+                <div class="fd-predict-score-wrap">
+                  <div class="fd-predict-label" style="font-size:0.85rem;color:#64748B;font-weight:600;">Expected Health Score</div>
+                  <div class="fd-predict-num" id="predictedScoreNum" style="font-size:2.2rem;font-weight:800;color:#F57C00;line-height:1.2;">95/100</div>
+                  <div class="fd-predict-subtext" id="predictedScoreSubtext" style="font-size:0.8rem;color:#2E7D32;font-weight:700;margin-top:0.2rem;">↑ +4 pts improvement expected</div>
+                </div>
+                <div class="fd-predict-accuracy-wrap" style="text-align:right;min-width:130px;">
+                  <div style="font-size:0.75rem;color:#64748B;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">AI Accuracy</div>
+                  <div style="font-size:1.5rem;font-weight:800;color:#2E7D32;margin:0.15rem 0;">96%</div>
+                  <div style="width:100%;height:6px;background:#E2E8F0;border-radius:4px;overflow:hidden;">
+                    <div style="width:96%;height:100%;background:linear-gradient(90deg, #8BC34A, #2E7D32);border-radius:4px;"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="fd-predict-sub-title" style="font-weight:800;font-size:1.05rem;color:var(--fd-text-dark);margin-top:1.5rem;display:flex;align-items:center;gap:0.4rem;">
+                <span class="material-icons-round" style="color:#2E7D32;font-size:1.2rem;">tips_and_updates</span>
+                Action Suggestions
+              </div>
+              <ul class="fd-predict-suggestions" id="predictionSuggestionsList" style="margin-top:0.75rem;display:flex;flex-direction:column;gap:0.6rem;list-style:none;padding:0;">
+                <li style="display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.7);padding:0.75rem 1rem;border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 2px 5px rgba(0,0,0,0.02);transition:all 0.3s ease;">
+                  <span class="badge badge-dry-fruits" style="font-size:0.75rem;padding:0.2rem 0.5rem;background:#E8F5E9;color:#2E7D32;border-radius:6px;font-weight:700;">📈 Demand</span>
+                  <span style="font-weight:600;color:#334155;font-size:0.9rem;">Groundnut demand expected to rise</span>
+                </li>
+                <li style="display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.7);padding:0.75rem 1rem;border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 2px 5px rgba(0,0,0,0.02);transition:all 0.3s ease;">
+                  <span class="badge" style="font-size:0.75rem;padding:0.2rem 0.5rem;background:#FFF3E0;color:#F57C00;border-radius:6px;font-weight:700;">📦 Stock</span>
+                  <span style="font-weight:600;color:#334155;font-size:0.9rem;">Increase Rice inventory by 8%</span>
+                </li>
+                <li style="display:flex;align-items:center;gap:0.6rem;background:rgba(255,255,255,0.7);padding:0.75rem 1rem;border-radius:12px;border:1px solid #E2E8F0;box-shadow:0 2px 5px rgba(0,0,0,0.02);transition:all 0.3s ease;">
+                  <span class="badge" style="font-size:0.75rem;padding:0.2rem 0.5rem;background:#E3F2FD;color:#1E88E5;border-radius:6px;font-weight:700;">⚡ Speed</span>
+                  <span style="font-weight:600;color:#334155;font-size:0.9rem;">Respond faster to customer orders</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <!-- Bottom Row: Achievement Badges -->
+          <div class="fd-health-card fd-badges-card" style="margin-top:2rem;">
+            <div class="fd-health-card-header">
+              <div class="fd-health-title">
+                <span class="material-icons-round" style="color:#FFB300;">military_tech</span>
+                Achievement Badges
+              </div>
+              <span class="fd-badge-green" id="unlockedBadgesCount" style="font-weight:700;">0 / 5 Unlocked</span>
+            </div>
+            <div class="fd-badges-grid" id="badgesGrid" style="margin-top:1.25rem;">
+              
+              <!-- Badge 1: Top Farmer -->
+              <div class="fd-badge-item locked" id="badge-top-farmer">
+                <div class="fd-badge-icon">🥇</div>
+                <div class="fd-badge-name">Top Farmer</div>
+                <div class="fd-badge-desc">Score 90+ overall</div>
+                <div class="fd-badge-progress-wrap" style="margin-top:0.6rem;width:100%;">
+                  <div class="fd-badge-prog-bar" style="width:100%;height:6px;background:#E2E8F0;border-radius:4px;overflow:hidden;"><div class="fd-badge-prog-fill" id="progBar-top-farmer" style="width:0%;height:100%;background:#4CAF50;transition:width 0.5s ease;"></div></div>
+                  <div class="fd-badge-prog-text" id="progText-top-farmer" style="font-size:0.75rem;color:#64748B;font-weight:600;margin-top:0.3rem;">0% Complete</div>
+                </div>
+                <div class="fd-badge-status" id="status-top-farmer" style="font-size:0.75rem;font-weight:700;margin-top:0.25rem;color:#94A3B8;">Locked 🔒</div>
+              </div>
+              
+              <!-- Badge 2: Trusted Seller -->
+              <div class="fd-badge-item locked" id="badge-trusted-seller">
+                <div class="fd-badge-icon">⭐</div>
+                <div class="fd-badge-name">Trusted Seller</div>
+                <div class="fd-badge-desc">4.5+ ⭐ average rating</div>
+                <div class="fd-badge-progress-wrap" style="margin-top:0.6rem;width:100%;">
+                  <div class="fd-badge-prog-bar" style="width:100%;height:6px;background:#E2E8F0;border-radius:4px;overflow:hidden;"><div class="fd-badge-prog-fill" id="progBar-trusted-seller" style="width:0%;height:100%;background:#4CAF50;transition:width 0.5s ease;"></div></div>
+                  <div class="fd-badge-prog-text" id="progText-trusted-seller" style="font-size:0.75rem;color:#64748B;font-weight:600;margin-top:0.3rem;">0% Complete</div>
+                </div>
+                <div class="fd-badge-status" id="status-trusted-seller" style="font-size:0.75rem;font-weight:700;margin-top:0.25rem;color:#94A3B8;">Locked 🔒</div>
+              </div>
+              
+              <!-- Badge 3: Dry Fruits Seller (SVG Leaf Shield) -->
+              <div class="fd-badge-item locked" id="badge-organic-seller">
+                <div class="fd-badge-icon" style="display:flex;align-items:center;justify-content:center;height:45px;">
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 5V11.09C4 16.14 7.41 20.85 12 22C16.59 20.85 20 16.14 20 11.09V5L12 2Z" fill="url(#organicShieldGrad)" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M12 7C9.24 7 7 9.24 7 12C7 15.5 12 19 12 19C12 19 17 15.5 17 12C17 9.24 14.76 7 12 7Z" fill="#4CAF50" fill-opacity="0.9"/>
+                    <path d="M12 9V17M12 13C10.5 11.5 9 12 9 12M12 11C13.5 9.5 15 10 15 10" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <defs>
+                      <linearGradient id="organicShieldGrad" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#E8F5E9"/>
+                        <stop offset="100%" stop-color="#C8E6C9"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+                <div class="fd-badge-name">Dry Fruits Seller</div>
+                <div class="fd-badge-desc">Verified Dry Fruits Produce</div>
+                <div class="fd-badge-progress-wrap" style="margin-top:0.6rem;width:100%;">
+                  <div class="fd-badge-prog-bar" style="width:100%;height:6px;background:#E2E8F0;border-radius:4px;overflow:hidden;"><div class="fd-badge-prog-fill" id="progBar-organic-seller" style="width:0%;height:100%;background:#4CAF50;transition:width 0.5s ease;"></div></div>
+                  <div class="fd-badge-prog-text" id="progText-organic-seller" style="font-size:0.75rem;color:#64748B;font-weight:600;margin-top:0.3rem;">0% Complete</div>
+                </div>
+                <div class="fd-badge-status" id="status-organic-seller" style="font-size:0.75rem;font-weight:700;margin-top:0.25rem;color:#94A3B8;">Locked 🔒</div>
+              </div>
+              
+              <!-- Badge 4: Fast Delivery -->
+              <div class="fd-badge-item locked" id="badge-fast-delivery">
+                <div class="fd-badge-icon">📦</div>
+                <div class="fd-badge-name">Fast Delivery</div>
+                <div class="fd-badge-desc">90%+ delivery rate</div>
+                <div class="fd-badge-progress-wrap" style="margin-top:0.6rem;width:100%;">
+                  <div class="fd-badge-prog-bar" style="width:100%;height:6px;background:#E2E8F0;border-radius:4px;overflow:hidden;"><div class="fd-badge-prog-fill" id="progBar-fast-delivery" style="width:0%;height:100%;background:#4CAF50;transition:width 0.5s ease;"></div></div>
+                  <div class="fd-badge-prog-text" id="progText-fast-delivery" style="font-size:0.75rem;color:#64748B;font-weight:600;margin-top:0.3rem;">0% Complete</div>
+                </div>
+                <div class="fd-badge-status" id="status-fast-delivery" style="font-size:0.75rem;font-weight:700;margin-top:0.25rem;color:#94A3B8;">Locked 🔒</div>
+              </div>
+              
+              <!-- Badge 5: Best Rated Farm (SVG Golden Trophy Award Ribbon) -->
+              <div class="fd-badge-item locked" id="badge-best-rated">
+                <div class="fd-badge-icon" style="display:flex;align-items:center;justify-content:center;height:45px;">
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 15C15.866 15 19 11.866 19 8C19 4.13401 15.866 1 12 1C8.13401 1 5 4.13401 5 8C5 11.866 8.13401 15 12 15Z" fill="url(#trophyGoldGrad)" stroke="#F57C00" stroke-width="1.5"/>
+                    <path d="M8.21 13.89L7 23L12 20L17 23L15.79 13.88" fill="url(#ribbonGrad)" stroke="#E65100" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 5.5L13.09 7.71L15.5 8.06L13.75 9.77L14.16 12.17L12 11.04L9.84 12.17L10.25 9.77L8.5 8.06L10.91 7.71L12 5.5Z" fill="#FFFFFF"/>
+                    <defs>
+                      <linearGradient id="trophyGoldGrad" x1="5" y1="1" x2="19" y2="15" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#FFF8E1"/>
+                        <stop offset="50%" stop-color="#FFD54F"/>
+                        <stop offset="100%" stop-color="#FFB300"/>
+                      </linearGradient>
+                      <linearGradient id="ribbonGrad" x1="7" y1="14" x2="17" y2="23" gradientUnits="userSpaceOnUse">
+                        <stop offset="0%" stop-color="#FF8F00"/>
+                        <stop offset="100%" stop-color="#E65100"/>
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+                <div class="fd-badge-name">Best Rated Farm</div>
+                <div class="fd-badge-desc">Score 85+ & 3+ crops</div>
+                <div class="fd-badge-progress-wrap" style="margin-top:0.6rem;width:100%;">
+                  <div class="fd-badge-prog-bar" style="width:100%;height:6px;background:#E2E8F0;border-radius:4px;overflow:hidden;"><div class="fd-badge-prog-fill" id="progBar-best-rated" style="width:0%;height:100%;background:#4CAF50;transition:width 0.5s ease;"></div></div>
+                  <div class="fd-badge-prog-text" id="progText-best-rated" style="font-size:0.75rem;color:#64748B;font-weight:600;margin-top:0.3rem;">0% Complete</div>
+                </div>
+                <div class="fd-badge-status" id="status-best-rated" style="font-size:0.75rem;font-weight:700;margin-top:0.25rem;color:#94A3B8;">Locked 🔒</div>
+              </div>
+              
+            </div>
+          </div>
+          
+        </div>
+
+        <!-- Recent Orders -->
+        <div class="fd-card" style="margin-top:2rem;">
+          <div class="fd-card-header">
+            <div class="fd-card-title">
+              <span class="material-icons-round" style="color:#F57C00;">receipt_long</span>
+              Recent Customer Orders
+            </div>
+            <button class="fd-btn-outline" onclick="switchNav('orders')">View All →</button>
+          </div>
+          <div class="fd-table-wrap">
+            <table class="fd-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Customer</th>
+                  <th>Items</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="overviewOrdersTable">
+                <tr><td colspan="6" class="fd-table-empty">Loading orders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Weather Card -->
+        <div class="fd-card fd-weather-card" style="margin-top:2rem;" id="weatherCard">
+          <div class="fd-card-header">
+            <div class="fd-card-title">
+              <span class="material-icons-round" style="color:#FB8C00;">cloud</span>
+              Farm Weather Today
+            </div>
+            <div style="display: flex; flex-direction: column; align-items: flex-end;">
+              <span class="fd-weather-location" id="weatherLocation">India</span>
+              <span id="weatherUpdated" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Fetching live data...</span>
+            </div>
+          </div>
+          <div class="fd-weather-grid">
+            <div class="fd-weather-main">
+              <div class="fd-weather-icon-big" id="weatherIcon">☀️</div>
+              <div class="fd-weather-temp" id="weatherTemp">--°C</div>
+              <div class="fd-weather-desc" id="weatherDesc">Loading weather…</div>
+            </div>
+            <div class="fd-weather-details">
+              <div class="fd-weather-detail-item">
+                <span class="material-icons-round" style="color:#2196F3;">water_drop</span>
+                <div><div class="fd-wd-label">Humidity</div><div class="fd-wd-val" id="weatherHumidity">--%</div></div>
+              </div>
+              <div class="fd-weather-detail-item">
+                <span class="material-icons-round" style="color:#607D8B;">air</span>
+                <div><div class="fd-wd-label">Wind Speed</div><div class="fd-wd-val" id="weatherWind">-- km/h</div></div>
+              </div>
+              <div class="fd-weather-detail-item">
+                <span class="material-icons-round" style="color:#FF9800;">thermostat</span>
+                <div><div class="fd-wd-label">Feels Like</div><div class="fd-wd-val" id="weatherFeels">--°C</div></div>
+              </div>
+              <div class="fd-weather-detail-item">
+                <span class="material-icons-round" style="color:#2196F3;">umbrella</span>
+                <div><div class="fd-wd-label">Rain Prob.</div><div class="fd-wd-val" id="weatherRain">--%</div></div>
+              </div>
+              <div class="fd-weather-detail-item">
+                <span class="material-icons-round" style="color:#FFC107;">wb_sunny</span>
+                <div><div class="fd-wd-label">Sunrise</div><div class="fd-wd-val" id="weatherSunrise">--:--</div></div>
+              </div>
+              <div class="fd-weather-detail-item">
+                <span class="material-icons-round" style="color:#FF5722;">nights_stay</span>
+                <div><div class="fd-wd-label">Sunset</div><div class="fd-wd-val" id="weatherSunset">--:--</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────
+           2. MY PRODUCTS
+      ────────────────────────────────────── -->
+      <div id="sec-products" class="nav-section" style="display:none;">
+        <div class="fd-card">
+          <div class="fd-card-header">
+            <div class="fd-card-title">
+              <span class="material-icons-round" style="color:#2E7D32;">inventory_2</span>
+              My Uploaded Products
+              <span class="fd-count-badge" id="prodCountText">0</span>
+            </div>
+            <button class="fd-btn-primary" onclick="openAddProductModal()">
+              <span class="material-icons-round" style="font-size:1rem;">add</span> New Product
+            </button>
+          </div>
+
+          <!-- Upload Drop Zone -->
+          <div class="fd-dropzone" id="uploadDropzone" onclick="openAddProductModal()">
+            <div class="fd-dropzone-icon">
+              <span class="material-icons-round">cloud_upload</span>
+            </div>
+            <div class="fd-dropzone-title">Upload New Product to Marketplace</div>
+            <div class="fd-dropzone-sub">Click here to add a new crop listing with image, price & details</div>
+            <button class="fd-btn-orange" type="button" onclick="openAddProductModal()">
+              <span class="material-icons-round" style="font-size:1rem;">add_photo_alternate</span> Add Product
+            </button>
+          </div>
+
+          <div class="fd-table-wrap" style="margin-top:1.5rem;">
+            <table class="fd-table">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Product Name</th>
+                  <th>Category</th>
+                  <th>Price / Unit</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="productsTableBody">
+                <tr><td colspan="7" class="fd-table-empty">Loading products…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────
+           3. CUSTOMER ORDERS
+      ────────────────────────────────────── -->
+      <div id="sec-orders" class="nav-section" style="display:none;">
+        <div class="fd-card">
+          <div class="fd-card-header">
+            <div class="fd-card-title">
+              <span class="material-icons-round" style="color:#F57C00;">receipt_long</span>
+              All Customer Orders
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:center;">
+              <select class="fd-select-sm" id="orderFilterStatus" onchange="filterOrders()">
+                <option value="">All Status</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Confirmed</option>
+                <option value="shipped">Shipped</option>
+                <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
+              </select>
+            </div>
+          </div>
+          <div class="fd-table-wrap">
+            <table class="fd-table">
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Date</th>
+                  <th>Customer & Phone</th>
+                  <th>Product & Qty</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Update Status</th>
+                </tr>
+              </thead>
+              <tbody id="allOrdersTableBody">
+                <tr><td colspan="7" class="fd-table-empty">Loading orders…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────
+           4. ANALYTICS
+      ────────────────────────────────────── -->
+      <div id="sec-analytics" class="nav-section" style="display:none;">
+        <div class="fd-analytics-grid">
+          <div class="fd-card fd-analytics-card">
+            <div class="fd-card-header">
+              <div class="fd-card-title">
+                <span class="material-icons-round" style="color:#2E7D32;">bar_chart</span>
+                Revenue Overview
+              </div>
+              <span class="fd-badge-green">This Month</span>
+            </div>
+            <div class="fd-chart-bars" id="analyticsChart">
+              <div class="fd-chart-loading">
+                <span class="material-icons-round" style="font-size:2.5rem;color:#A5D6A7;">bar_chart</span>
+                <div>Load your orders to see analytics</div>
+              </div>
+            </div>
+          </div>
+          <div class="fd-analytics-side">
+            <div class="fd-card fd-mini-stat-card">
+              <span class="material-icons-round fd-mini-icon" style="color:#2E7D32;">trending_up</span>
+              <div class="fd-mini-num" id="an-totalRev">₹0</div>
+              <div class="fd-mini-label">Total Revenue</div>
+            </div>
+            <div class="fd-card fd-mini-stat-card">
+              <span class="material-icons-round fd-mini-icon" style="color:#F57C00;">shopping_cart</span>
+              <div class="fd-mini-num" id="an-totalOrders">0</div>
+              <div class="fd-mini-label">Total Orders</div>
+            </div>
+            <div class="fd-card fd-mini-stat-card">
+              <span class="material-icons-round fd-mini-icon" style="color:#1565C0;">check_circle</span>
+              <div class="fd-mini-num" id="an-delivered">0</div>
+              <div class="fd-mini-label">Delivered</div>
+            </div>
+            <div class="fd-card fd-mini-stat-card">
+              <span class="material-icons-round fd-mini-icon" style="color:#B71C1C;">cancel</span>
+              <div class="fd-mini-num" id="an-cancelled">0</div>
+              <div class="fd-mini-label">Cancelled</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Orders by Status Breakdown -->
+        <div class="fd-card" style="margin-top:2rem;">
+          <div class="fd-card-header">
+            <div class="fd-card-title">
+              <span class="material-icons-round" style="color:#FB8C00;">donut_large</span>
+              Orders by Status
+            </div>
+          </div>
+          <div class="fd-status-bars" id="statusBars">
+            <div class="fd-chart-loading">No data yet — complete some orders to see your analytics</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────
+           5. DEMAND PREDICTOR
+      ────────────────────────────────────── -->
+      <div id="sec-predictor" class="nav-section" style="display:none;">
+        <div class="fd-predictor-grid">
+          <div class="fd-card fd-predictor-card">
+            <div class="fd-card-header">
+              <div class="fd-card-title">
+                <span class="material-icons-round" style="color:#F57C00;">trending_up</span>
+                Market Demand Predictor
+              </div>
+              <span class="fd-badge-orange">AI Powered</span>
+            </div>
+            <p class="fd-predictor-desc">Select your crop and season to get AI-powered demand predictions and price guidance based on market trends.</p>
+
+            <div class="fd-predictor-form">
+              <div class="fd-form-group">
+                <label class="fd-label">Select Crop / Product</label>
+                <div class="fd-select-wrap">
+                  <span class="material-icons-round fd-select-icon">eco</span>
+                  <select class="fd-select" id="predictorCrop" style="border-radius: 14px; padding: 0.85rem 1rem; border: 2px solid #444; background: #343434; color: #fff; outline: none; cursor: pointer; transition: all 0.3s;" onfocus="this.style.borderColor='#FF9800'" onblur="this.style.borderColor='#444'">
+                    <option value="">-- Choose a Crop --</option>
+                    <option value="rice">Rice</option>
+                    <option value="basmati_rice">Basmati Rice</option>
+                    <option value="brown_rice">Brown Rice</option>
+                    <option value="sona_masoori_rice">Sona Masoori Rice</option>
+                    <option value="wheat">Wheat</option>
+                    <option value="maize">Maize / Corn</option>
+                    <option value="onions">Onions</option>
+                    <option value="potatoes">Potatoes</option>
+                    <option value="chillies">Chillies</option>
+                    <option value="red_chilli">Red Chilli</option>
+                    <option value="black_pepper">Black Pepper</option>
+                    <option value="turmeric">Turmeric</option>
+                    <option value="ginger">Ginger</option>
+                    <option value="coriander_seeds">Coriander Seeds</option>
+                    <option value="mustard_seeds">Mustard Seeds</option>
+                    <option value="groundnuts">Groundnuts</option>
+                    <option value="peanuts">Peanuts</option>
+                    <option value="foxtail_millet">Foxtail Millet</option>
+                    <option value="finger_millet">Finger Millet</option>
+                    <option value="pearl_millet">Pearl Millet</option>
+                    <option value="little_millet">Little Millet</option>
+                    <option value="barnyard_millet">Barnyard Millet</option>
+                    <option value="almonds">Almonds</option>
+                    <option value="cashews">Cashews</option>
+                    <option value="walnuts">Walnuts</option>
+                    <option value="pistachios">Pistachios</option>
+                    <option value="raisins">Raisins</option>
+                    <option value="black_raisins">Black Raisins</option>
+                    <option value="dry_dates">Dry Dates</option>
+                    <option value="dry_figs">Dry Figs</option>
+                    <option value="coconut">Coconut</option>
+                    <option value="copra">Copra</option>
+                    <option value="mangoes">Mangoes</option>
+                    <option value="bananas">Bananas</option>
+                    <option value="sugarcane">Sugarcane</option>
+                    <option value="cotton">Cotton</option>
+                    <option value="honey">Honey</option>
+                    <option value="jaggery">Jaggery</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fd-form-group">
+                <label class="fd-label">Region</label>
+                <div class="fd-select-wrap">
+                  <span class="material-icons-round fd-select-icon">map</span>
+                  <select class="fd-select" id="predictorRegion">
+                    <option value="south">South India</option>
+                    <option value="north">North India</option>
+                    <option value="east">East India</option>
+                    <option value="west">West India</option>
+                    <option value="central">Central India</option>
+                  </select>
+                </div>
+              </div>
+              <div class="fd-form-group">
+                <label class="fd-label">Season</label>
+                <div class="fd-select-wrap">
+                  <span class="material-icons-round fd-select-icon">calendar_month</span>
+                  <select class="fd-select" id="predictorSeason">
+                    <option value="summer">Summer</option>
+                    <option value="winter">Winter</option>
+                    <option value="rainy">Rainy</option>
+                    <option value="spring">Spring</option>
+                  </select>
+                </div>
+              </div>
+              <button class="fd-btn-primary" onclick="predictDemand()" style="width:100%;margin-top:1rem;">
+                <span class="material-icons-round">insights</span> Generate AI Prediction
+              </button>
+            </div>
+          </div>
+
+          <!-- Prediction Result (Premium Dark Redesign) -->
+          <div class="fd-card fd-prediction-result" id="predictionResult" style="display:none; background: linear-gradient(145deg, #232526, #414345); border: 1px solid rgba(255,152,0,0.3); box-shadow: 0 10px 30px rgba(0,0,0,0.3); border-radius: 16px; color: #fff;">
+            <div class="fd-prediction-header" style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 1.5rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem;">
+              <div class="fd-prediction-crop-img" id="predCropImg" style="font-size: 2.5rem; background: linear-gradient(135deg, #F57C00, #2E7D32); width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 4px 15px rgba(245,124,0,0.4); border: 2px solid rgba(255,255,255,0.2); color: #fff;"><span class="material-icons-round" style="font-size: 2.4rem;">eco</span></div>
+              <div style="flex:1;">
+                <div class="fd-prediction-crop" id="predCropName" style="color: #fff; font-size: 1.6rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">Crop Name</div>
+                <div class="fd-prediction-season" style="color: rgba(255,255,255,0.7); font-weight: 500; font-size: 0.95rem; margin-top: 0.3rem;">
+                  <span class="material-icons-round" style="font-size:1.1rem; vertical-align:middle; color: #FF9800;">auto_awesome</span> 
+                  AI Confidence: <span id="predConfidence" style="color: #4CAF50; font-weight:800;">92%</span>
+                  <span style="margin-left: 0.5rem; margin-right: 0.5rem;">|</span>
+                  <span id="predSeasonText">Season</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="fd-prediction-metrics" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+              <!-- Demand Level -->
+              <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div class="fd-pred-metric-icon" style="background: rgba(76,175,80,0.2); color: #4CAF50; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;"><span class="material-icons-round">show_chart</span></div>
+                <div class="fd-pred-metric-label" style="font-size:0.85rem; color:rgba(255,255,255,0.6); font-weight:600; text-transform:uppercase;">Demand Level</div>
+                <div class="fd-pred-metric-val" id="predDemand" style="font-size:1.4rem; color:#fff; font-weight:800;">High</div>
+                <div style="margin-top:0.8rem; background: rgba(0,0,0,0.2); height:6px; border-radius:3px; overflow:hidden;">
+                  <div id="predDemandBar" style="height:100%; background: linear-gradient(90deg, #F57C00, #4CAF50); width: 0%; transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);"></div>
+                </div>
+              </div>
+
+              <!-- Expected Price -->
+              <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div class="fd-pred-metric-icon" style="background: rgba(33,150,243,0.2); color: #2196F3; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;"><span class="material-icons-round">currency_rupee</span></div>
+                <div class="fd-pred-metric-label" style="font-size:0.85rem; color:rgba(255,255,255,0.6); font-weight:600; text-transform:uppercase;">Expected Price</div>
+                <div class="fd-pred-metric-val" id="predPrice" style="font-size:1.4rem; color:#fff; font-weight:800;">₹40/kg</div>
+              </div>
+
+              <!-- Market Trend -->
+              <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-3px)'" onmouseout="this.style.transform='translateY(0)'">
+                <div class="fd-pred-metric-icon" style="background: rgba(255,152,0,0.2); color: #FF9800; width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 0.8rem;"><span class="material-icons-round" id="predTrendIcon">trending_up</span></div>
+                <div class="fd-pred-metric-label" style="font-size:0.85rem; color:rgba(255,255,255,0.6); font-weight:600; text-transform:uppercase;">Market Trend</div>
+                <div class="fd-pred-metric-val" id="predTrend" style="font-size:1.4rem; color:#fff; font-weight:800;">Rising</div>
+              </div>
+            </div>
+
+            <!-- Best Selling Time -->
+            <div style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: transform 0.2s; cursor: default;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              <div style="background: rgba(76,175,80,0.2); color: #4CAF50; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink:0;">
+                <span class="material-icons-round">calendar_month</span>
+              </div>
+              <div>
+                <div style="font-size:0.85rem; color:rgba(255,255,255,0.6); font-weight:600; text-transform:uppercase;">Best Selling Time</div>
+                <div id="predBestTime" style="font-size:1.1rem; color:#fff; font-weight:700;">First week of next month</div>
+              </div>
+            </div>
+
+            <!-- AI Insights & Recommendation -->
+            <div class="fd-prediction-rec" id="predRec" style="background: rgba(255,152,0,0.1); border: 1px solid rgba(255,152,0,0.3); border-radius: 12px; padding: 1.5rem; position: relative; overflow: hidden;">
+              <!-- Decorative highlight -->
+              <div style="position: absolute; top:0; left:0; width: 4px; height: 100%; background: #FF9800;"></div>
+              
+              <div style="display:flex; align-items:center; gap: 0.5rem; margin-bottom: 0.8rem;">
+                <span class="material-icons-round" style="color:#FF9800; font-size:1.2rem;">tips_and_updates</span>
+                <span style="font-weight:800; color:#fff;">AI Insights & Recommendation</span>
+              </div>
+              <p id="predRecText" style="color:rgba(255,255,255,0.85); font-size:0.95rem; line-height:1.6; margin:0;">Recommendation will appear here.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────
+           6. PROFILE
+      ────────────────────────────────────── -->
+      <!-- ══════════════════════════════════════════
+           GOVERNMENT SCHEMES
+      ══════════════════════════════════════════ -->
+      <div id="sec-schemes" class="nav-section" style="display:none;">
+        <div class="fd-page-header">
+          <h2 class="fd-page-title">Government Schemes & Subsidies</h2>
+          <p style="color:var(--fd-text-muted); font-size:0.9rem; margin-top:0.25rem;">Access official agricultural schemes, subsidies, and financial support.</p>
+        </div>
+        <div class="fd-schemes-grid" style="padding-top: 1rem;">
+          <div class="fd-scheme-card">
+            <div class="fd-scheme-icon">
+              <span class="material-icons-round" style="font-size:2rem;">volunteer_activism</span>
+            </div>
+            <h3 class="fd-scheme-title">PM-KISAN Samman Nidhi</h3>
+            <p class="fd-scheme-desc">Income support scheme providing financial assistance to eligible farmers.</p>
+            <div class="fd-scheme-tags">
+              <span class="fd-scheme-tag green">₹6,000 per year</span>
+              <span class="fd-scheme-tag">Landholding farmers</span>
+            </div>
+            <div class="fd-scheme-actions">
+              <button class="fd-scheme-btn fd-scheme-btn-primary" onclick="openSchemeModal(1)">View Details</button>
+              <a href="https://pmkisan.gov.in" target="_blank" class="fd-scheme-btn fd-scheme-btn-secondary">Official Website</a>
+            </div>
+          </div>
+          <div class="fd-scheme-card">
+            <div class="fd-scheme-icon">
+              <span class="material-icons-round" style="font-size:2rem;">health_and_safety</span>
+            </div>
+            <h3 class="fd-scheme-title">PM Fasal Bima Yojana (PMFBY)</h3>
+            <p class="fd-scheme-desc">Crop insurance scheme protecting farmers against crop loss due to natural calamities.</p>
+            <div class="fd-scheme-tags">
+              <span class="fd-scheme-tag green">Comprehensive crop insurance</span>
+              <span class="fd-scheme-tag">All farmers growing notified crops</span>
+            </div>
+            <div class="fd-scheme-actions">
+              <button class="fd-scheme-btn fd-scheme-btn-primary" onclick="openSchemeModal(2)">View Details</button>
+              <a href="https://pmfby.gov.in" target="_blank" class="fd-scheme-btn fd-scheme-btn-secondary">Official Website</a>
+            </div>
+          </div>
+          <div class="fd-scheme-card">
+            <div class="fd-scheme-icon">
+              <span class="material-icons-round" style="font-size:2rem;">credit_card</span>
+            </div>
+            <h3 class="fd-scheme-title">Kisan Credit Card (KCC)</h3>
+            <p class="fd-scheme-desc">Provides affordable agricultural loans and working capital to farmers.</p>
+            <div class="fd-scheme-tags">
+              <span class="fd-scheme-tag green">Low-interest credit</span>
+              <span class="fd-scheme-tag">Farmers, tenant farmers, SHGs</span>
+            </div>
+            <div class="fd-scheme-actions">
+              <button class="fd-scheme-btn fd-scheme-btn-primary" onclick="openSchemeModal(3)">View Details</button>
+              <a href="https://www.myscheme.gov.in/schemes/kcc" target="_blank" class="fd-scheme-btn fd-scheme-btn-secondary">Official Website</a>
+            </div>
+          </div>
+          <div class="fd-scheme-card">
+            <div class="fd-scheme-icon">
+              <span class="material-icons-round" style="font-size:2rem;">grass</span>
+            </div>
+            <h3 class="fd-scheme-title">Soil Health Card Scheme</h3>
+            <p class="fd-scheme-desc">Provides farmers with soil health reports and fertilizer recommendations.</p>
+            <div class="fd-scheme-tags">
+              <span class="fd-scheme-tag green">Customized fertilizer advice</span>
+              <span class="fd-scheme-tag">All farmers</span>
+            </div>
+            <div class="fd-scheme-actions">
+              <button class="fd-scheme-btn fd-scheme-btn-primary" onclick="openSchemeModal(4)">View Details</button>
+              <a href="https://soilhealth.dac.gov.in" target="_blank" class="fd-scheme-btn fd-scheme-btn-secondary">Official Website</a>
+            </div>
+          </div>
+          <div class="fd-scheme-card">
+            <div class="fd-scheme-icon">
+              <span class="material-icons-round" style="font-size:2rem;">storefront</span>
+            </div>
+            <h3 class="fd-scheme-title">e-NAM (National Agriculture Market)</h3>
+            <p class="fd-scheme-desc">National online agricultural trading platform connecting farmers and markets.</p>
+            <div class="fd-scheme-tags">
+              <span class="fd-scheme-tag green">Better price discovery</span>
+              <span class="fd-scheme-tag">Farmers, FPOs, Traders</span>
+            </div>
+            <div class="fd-scheme-actions">
+              <button class="fd-scheme-btn fd-scheme-btn-primary" onclick="openSchemeModal(5)">View Details</button>
+              <a href="https://enam.gov.in" target="_blank" class="fd-scheme-btn fd-scheme-btn-secondary">Official Website</a>
+            </div>
+          </div>
+          <div class="fd-scheme-card">
+            <div class="fd-scheme-icon">
+              <span class="material-icons-round" style="font-size:2rem;">water_drop</span>
+            </div>
+            <h3 class="fd-scheme-title">Pradhan Mantri Krishi Sinchai Yojana (PMKSY)</h3>
+            <p class="fd-scheme-desc">Promotes efficient irrigation and water conservation for agriculture.</p>
+            <div class="fd-scheme-tags">
+              <span class="fd-scheme-tag green">Micro-irrigation subsidies</span>
+              <span class="fd-scheme-tag">All farmers with land</span>
+            </div>
+            <div class="fd-scheme-actions">
+              <button class="fd-scheme-btn fd-scheme-btn-primary" onclick="openSchemeModal(6)">View Details</button>
+              <a href="https://pmksy.gov.in" target="_blank" class="fd-scheme-btn fd-scheme-btn-secondary">Official Website</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scheme Details Modal -->
+      <div class="fd-scheme-modal-overlay" id="schemeModalOverlay" onclick="closeSchemeModal(event)">
+        <div class="fd-scheme-modal">
+          <div class="fd-scheme-modal-header">
+            <div class="fd-scheme-modal-title" id="smTitle">
+              <span class="material-icons-round">account_balance</span> Scheme Name
+            </div>
+            <button class="fd-scheme-modal-close" onclick="closeSchemeModal()"><span class="material-icons-round">close</span></button>
+          </div>
+          <div class="fd-scheme-modal-body">
+            <div class="fd-scheme-section">
+              <h4><span class="material-icons-round">flag</span> Objective</h4>
+              <p id="smObj"></p>
+            </div>
+            <div class="fd-scheme-section">
+              <h4><span class="material-icons-round">star</span> Key Benefits</h4>
+              <ul id="smBen"></ul>
+            </div>
+            <div class="fd-scheme-section">
+              <h4><span class="material-icons-round">check_circle</span> Eligibility Criteria</h4>
+              <ul id="smElig"></ul>
+            </div>
+            <div class="fd-scheme-section">
+              <h4><span class="material-icons-round">description</span> Required Documents</h4>
+              <ul id="smDocs"></ul>
+            </div>
+            <div class="fd-scheme-section" style="margin-bottom:0;">
+              <h4><span class="material-icons-round">how_to_reg</span> How to Apply</h4>
+              <p id="smApply"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="sec-profile" class="nav-section" style="display:none;">
+        <div class="fd-profile-layout">
+          <!-- Profile Avatar Card -->
+          <div class="fd-card fd-profile-avatar-card">
+            <div class="fd-profile-avatar-wrap" style="position:relative; cursor:pointer;" onclick="document.getElementById('profileImgUpload').click()">
+              <input type="file" id="profileImgUpload" accept="image/*" style="display:none;" onchange="previewProfileImage(event)">
+              <img src="https://ui-avatars.com/api/?name=Farmer&background=2E7D32&color=fff&size=160" alt="Profile" class="fd-profile-avatar" id="profileAvatarImg" />
+              <div id="profileImgSpinner" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; border-radius:50%; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; color:#fff; z-index:10;">
+                <span class="material-icons-round fd-spin" style="font-size:2rem; color:#fff;">sync</span>
+              </div>
+              <div class="fd-profile-avatar-badge">
+                <span class="material-icons-round">camera_alt</span>
+              </div>
+            </div>
+            <div id="removeProfilePicBtn" style="display:none; margin-top: 10px; font-size: 0.85rem; color: #d32f2f; cursor: pointer; align-items: center; justify-content: center; gap: 4px;" onclick="removeProfilePicture()">
+              <span class="material-icons-round" style="font-size: 1rem;">delete_outline</span> Remove Photo
+            </div>
+            <div class="fd-profile-name" id="profileDisplayName">Farmer</div>
+            <div class="fd-profile-farm" id="profileDisplayFarm">Your Farm</div>
+            <div class="fd-profile-location" id="profileDisplayLocation">
+              <span class="material-icons-round" style="font-size:1rem;">location_on</span> India
+            </div>
+            <div class="fd-profile-stats">
+              <div class="fd-ps-item">
+                <div class="fd-ps-num" id="ps-products">0</div>
+                <div class="fd-ps-label">Products</div>
+              </div>
+              <div class="fd-ps-divider"></div>
+              <div class="fd-ps-item">
+                <div class="fd-ps-num" id="ps-orders">0</div>
+                <div class="fd-ps-label">Orders</div>
+              </div>
+              <div class="fd-ps-divider"></div>
+              <div class="fd-ps-item">
+                <div class="fd-ps-num" id="ps-revenue">₹0</div>
+                <div class="fd-ps-label">Revenue</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile Form -->
+          <div class="fd-card fd-profile-form-card">
+            <div class="fd-card-title" style="margin-bottom:1.5rem;">
+              <span class="material-icons-round" style="color:#2E7D32;">edit</span> Edit Farm & Farmer Details
+            </div>
+
+            <div class="fd-form-section-label">Personal Information</div>
+            <div class="fd-form-row">
+              <div class="fd-form-group">
+                <label class="fd-label">Farmer Full Name</label>
+                <div class="fd-input-wrap">
+                  <span class="material-icons-round fd-input-icon">person</span>
+                  <input type="text" class="fd-input" id="profName" placeholder="Full name" />
+                </div>
+              </div>
+              <div class="fd-form-group">
+                <label class="fd-label">Phone Number</label>
+                <div class="fd-input-wrap">
+                  <span class="material-icons-round fd-input-icon">phone</span>
+                  <input type="text" class="fd-input" id="profPhone" placeholder="10-digit number" />
+                </div>
+              </div>
+            </div>
+            <div class="fd-form-group">
+              <label class="fd-label">Language Preference</label>
+              <div class="fd-select-wrap">
+                <span class="material-icons-round fd-select-icon">translate</span>
+                <select class="fd-select" id="profLang">
+                  <option value="en">English</option>
+                  <option value="te">Telugu</option>
+                  <option value="hi">Hindi</option>
+                  <option value="ta">Tamil</option>
+                  <option value="kn">Kannada</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="fd-form-section-label" style="margin-top:1.5rem;">Farm Information</div>
+            <div class="fd-form-row">
+              <div class="fd-form-group">
+                <label class="fd-label">Farm Name</label>
+                <div class="fd-input-wrap">
+                  <span class="material-icons-round fd-input-icon">agriculture</span>
+                  <input type="text" class="fd-input" id="profFarmName" placeholder="e.g. Green Valley Farm" />
+                </div>
+              </div>
+              <div class="fd-form-group">
+                <label class="fd-label">Farm Size</label>
+                <div class="fd-input-wrap">
+                  <span class="material-icons-round fd-input-icon">landscape</span>
+                  <input type="text" class="fd-input" id="profFarmSize" placeholder="e.g. 5 Acres" />
+                </div>
+              </div>
+            </div>
+            <div class="fd-form-row">
+              <div class="fd-form-group">
+                <label class="fd-label">Village / Town</label>
+                <div class="fd-input-wrap">
+                  <span class="material-icons-round fd-input-icon">home</span>
+                  <input type="text" class="fd-input" id="profVillage" placeholder="Village name" />
+                </div>
+              </div>
+              <div class="fd-form-group">
+                <label class="fd-label">District</label>
+                <div class="fd-input-wrap">
+                  <span class="material-icons-round fd-input-icon">location_city</span>
+                  <input type="text" class="fd-input" id="profDistrict" placeholder="District" />
+                </div>
+              </div>
+            </div>
+            <div class="fd-form-group">
+              <label class="fd-label">State</label>
+              <div class="fd-input-wrap">
+                <span class="material-icons-round fd-input-icon">map</span>
+                <input type="text" class="fd-input" id="profState" placeholder="State name" />
+              </div>
+            </div>
+
+            <div class="fd-profile-actions">
+              <button class="fd-btn-primary" onclick="saveFarmerProfile()">
+                <span class="material-icons-round" style="font-size:1rem;">save</span> Save Changes
+              </button>
+              <button class="fd-btn-orange" onclick="populateProfile()">
+                <span class="material-icons-round" style="font-size:1rem;">refresh</span> Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ──────────────────────────────────────
+           7. SETTINGS
+      ────────────────────────────────────── -->
+      <div id="sec-settings" class="nav-section" style="display:none;">
+        <div class="fd-settings-grid">
+          <div class="fd-card fd-settings-card" onclick="openSettingsModal('account')">
+            <div class="fd-settings-icon" style="background:linear-gradient(135deg,#2E7D32,#43A047);">
+              <span class="material-icons-round">manage_accounts</span>
+            </div>
+            <div class="fd-settings-title">Account Settings</div>
+            <div class="fd-settings-desc">Update your email, password, and personal account security preferences.</div>
+            <div class="fd-settings-arrow"><span class="material-icons-round">arrow_forward_ios</span></div>
+          </div>
+          <div class="fd-card fd-settings-card" onclick="openSettingsModal('notifications')">
+            <div class="fd-settings-icon" style="background:linear-gradient(135deg,#F57C00,#FF9800);">
+              <span class="material-icons-round">notifications_active</span>
+            </div>
+            <div class="fd-settings-title">Notifications</div>
+            <div class="fd-settings-desc">Manage order alerts, weather warnings, and price update notifications.</div>
+            <div class="fd-settings-arrow"><span class="material-icons-round">arrow_forward_ios</span></div>
+          </div>
+          <div class="fd-card fd-settings-card" onclick="openSettingsModal('security')">
+            <div class="fd-settings-icon" style="background:linear-gradient(135deg,#1565C0,#1976D2);">
+              <span class="material-icons-round">security</span>
+            </div>
+            <div class="fd-settings-title">Security & Privacy</div>
+            <div class="fd-settings-desc">Two-factor authentication, login history, and data privacy controls.</div>
+            <div class="fd-settings-arrow"><span class="material-icons-round">arrow_forward_ios</span></div>
+          </div>
+          <div class="fd-card fd-settings-card" onclick="openSettingsModal('language')">
+            <div class="fd-settings-icon" style="background:linear-gradient(135deg,#6A1B9A,#8E24AA);">
+              <span class="material-icons-round">translate</span>
+            </div>
+            <div class="fd-settings-title">Language & Region</div>
+            <div class="fd-settings-desc">Switch between English, Telugu, Hindi, Tamil, and Kannada interfaces.</div>
+            <div class="fd-settings-arrow"><span class="material-icons-round">arrow_forward_ios</span></div>
+          </div>
+          <div class="fd-card fd-settings-card" onclick="openSettingsModal('support')">
+            <div class="fd-settings-icon" style="background:linear-gradient(135deg,#00695C,#00897B);">
+              <span class="material-icons-round">headset_mic</span>
+            </div>
+            <div class="fd-settings-title">Help & Support</div>
+            <div class="fd-settings-desc">Contact Farmigo support team, FAQs, and farmer community forums.</div>
+            <div class="fd-settings-arrow"><span class="material-icons-round">arrow_forward_ios</span></div>
+          </div>
+          <div class="fd-card fd-settings-card" onclick="logoutFarmer()">
+            <div class="fd-settings-icon" style="background:linear-gradient(135deg,#B71C1C,#C62828);">
+              <span class="material-icons-round">logout</span>
+            </div>
+            <div class="fd-settings-title">Sign Out</div>
+            <div class="fd-settings-desc">Securely log out from your Farmigo Farmer Portal account.</div>
+            <div class="fd-settings-arrow"><span class="material-icons-round">arrow_forward_ios</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /.fd-sections -->
+  </div><!-- /.fd-main -->
+</div><!-- /.fd-layout -->
+
+<!-- Sidebar Overlay (mobile) -->
+<div class="fd-sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ADD / EDIT PRODUCT MODAL (Premium Redesign)
+═══════════════════════════════════════════════════════════ -->
+<div class="fd-modal-overlay" id="productModal" style="backdrop-filter: blur(8px); background: rgba(0,0,0,0.6);">
+  <div class="fd-modal" style="background: #2B2B2B; border-radius: 16px; box-shadow: 0 30px 60px rgba(0,0,0,0.4); border: 1px solid #444; max-width: 600px; color: #fff;">
+    <div class="fd-modal-header" style="border-bottom: 1px solid #444; padding-bottom: 1.5rem; margin-bottom: 1.5rem;">
+      <div>
+        <div class="fd-modal-title" id="pModalTitle" style="color: #fff; font-size: 1.5rem;">Add New Product</div>
+        <div class="fd-modal-sub" style="color: rgba(255,255,255,0.6); font-weight: 500;">Upload your fresh produce to the live Farmigo marketplace</div>
+      </div>
+      <button class="fd-modal-close" onclick="closeProductModal()" style="background: #3C3C3C; color: #fff; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: none; cursor: pointer;" onmouseover="this.style.background='#555'" onmouseout="this.style.background='#3C3C3C'">
+        <span class="material-icons-round">close</span>
+      </button>
+    </div>
+    <div class="fd-modal-body">
+      <input type="hidden" id="pEditId" />
+      <div class="fd-form-group">
+        <label class="fd-label" style="color: rgba(255,255,255,0.85);">Product Name <span style="color: #FF5252;">*</span></label>
+        <input type="text" class="fd-input" id="pName" placeholder="e.g. Premium California Almonds" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'" />
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="fd-form-group">
+          <label class="fd-label" style="color: rgba(255,255,255,0.85);">Category <span style="color: #FF5252;">*</span></label>
+          <select class="fd-select" id="pCategory" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'">
+            <option value="">Select Category</option>
+            <option value="All Featured" disabled style="background:#555;color:#bbb;">All Featured (Display Only)</option>
+            <option value="vegetables">Vegetables</option>
+            <option value="fruits">Fruits</option>
+            <option value="grains">Grains & Rice</option>
+            <option value="pulses">Pulses & Dals</option>
+            <option value="dry fruits">Dry Fruits</option>
+            <option value="spices">Spices</option>
+          </select>
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label" style="color: rgba(255,255,255,0.85);">Price (₹) <span style="color: #FF5252;">*</span></label>
+          <input type="number" class="fd-input" id="pPrice" placeholder="e.g. 45" min="1" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'" />
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="fd-form-group">
+          <label class="fd-label" style="color: rgba(255,255,255,0.85);">Available Stock <span style="color: #FF5252;">*</span></label>
+          <input type="number" class="fd-input" id="pStock" placeholder="e.g. 500" min="0" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'" />
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label" style="color: rgba(255,255,255,0.85);">Unit <span style="color: #FF5252;">*</span></label>
+          <select class="fd-select" id="pUnit" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'">
+            <option value="kg">Per kg</option>
+            <option value="quintal">Per Quintal</option>
+            <option value="ton">Per Ton</option>
+            <option value="piece">Per Piece/Bundle</option>
+            <option value="liter">Per Liter</option>
+            <option value="box">Per Box</option>
+          </select>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="fd-form-group">
+          <label class="fd-label" style="color: rgba(255,255,255,0.85);">Harvest Date</label>
+          <input type="date" class="fd-input" id="pHarvestDate" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'" />
+        </div>
+        <div class="fd-form-group">
+          <label class="fd-label" style="color: rgba(255,255,255,0.85);">Dry Fruits Status</label>
+          <select class="fd-select" id="pOrganic" style="border: 1px solid #444; border-radius: 12px; background: #343434; color: #fff; outline: none; transition: border 0.3s;" onfocus="this.style.borderColor='#4CAF50'" onblur="this.style.borderColor='#444'">
+            <option value="Certified Organic">Certified Dry Fruits</option>
+            <option value="100% Natural">100% Natural</option>
+            <option value="Chemical-Free">Chemical-Free</option>
+            <option value="Standard">Standard Farming</option>
+          </select>
+        </div>
+      </div>
+      <div class="fd-form-group">
+        <label class="fd-label" style="color: rgba(255,255,255,0.85);">Product Image <span style="color: #FF5252;">*</span></label>
+        <div id="pImgDropZone" onclick="document.getElementById('pImgFile').click()" style="border: 2px dashed #555; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(255,255,255,0.02); position: relative; overflow: hidden;" onmouseover="this.style.borderColor='#4CAF50'; this.style.background='rgba(76, 175, 80, 0.05)'" onmouseout="this.style.borderColor='#555'; this.style.background='rgba(255,255,255,0.02)'">
+          <input type="file" id="pImgFile" accept="image/jpeg,image/jpg,image/png,image/webp" style="display: none;" onchange="previewProductImage(this)" />
+          <div id="pImgPreviewContainer" style="display: none; position: relative;">
+            <img id="pImgPreview" src="" alt="Preview" style="max-height: 180px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); max-width: 100%; object-fit: contain;" />
+            <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #4CAF50; font-weight: 600;">Click to replace image</div>
+          </div>
+          <div id="pImgPlaceholder">
+            <span class="material-icons-round" style="font-size: 3rem; color: #555;">add_photo_alternate</span>
+            <div style="font-weight: 600; color: #fff; margin-top: 0.5rem;">Upload Image</div>
+            <div style="font-size: 0.8rem; color: rgba(255,255,255,0.5); margin-top: 0.2rem;">Supports JPG, PNG, WEBP (Max 10MB)</div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+        <button type="button" onclick="closeProductModal()" style="flex: 1; border-radius: 12px; padding: 0.9rem; font-size: 1.05rem; background: #3C3C3C; border: 1px solid #555; color: #fff; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#4C4C4C'" onmouseout="this.style.background='#3C3C3C'">
+          Cancel
+        </button>
+        <button type="button" class="fd-btn-primary" id="pModalSaveBtn" onclick="saveProduct()" style="flex: 2; border-radius: 12px; padding: 0.9rem; font-size: 1.05rem; background: linear-gradient(135deg, #4CAF50, #2E7D32); box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4); border: none; color: #fff; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;">
+          <span class="material-icons-round" style="vertical-align: middle; margin-right: 0.5rem;">cloud_upload</span> Upload Product
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     PREMIUM SETTINGS GLASSMORPHISM MODAL
+═══════════════════════════════════════════════════════════ -->
+<div class="fd-modal-overlay" 

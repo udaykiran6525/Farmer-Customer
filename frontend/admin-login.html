@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Super Admin Portal | Farmigo Enterprise</title>
+  <meta name="description" content="Secure Super Admin Login Portal for Farmigo Platform Management." />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="/admin-style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="admin-login-body">
+  <div class="admin-login-wrapper">
+    <!-- Animated Background Elements -->
+    <div class="login-bg-circles">
+      <div class="circle-1"></div>
+      <div class="circle-2"></div>
+      <div class="circle-3"></div>
+      <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Glassmorphism Login Card -->
+    <div class="admin-login-card">
+      <div class="login-header">
+        <a href="/" class="login-logo">
+          <span class="logo-text">
+            Farmi<span class="orange-accent">go</span>
+          </span>
+        </a>
+        <h1 class="login-title">Super Admin Portal</h1>
+        <p class="login-subtitle">Platform Management Portal</p>
+      </div>
+
+      <div id="loginError" class="login-error-msg"></div>
+
+      <form id="adminLoginForm" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="adminEmail">Admin Email Address</label>
+          <div class="input-with-icon">
+            <input 
+              type="email" 
+              id="adminEmail" 
+              class="form-input" 
+              placeholder="Enter admin email" 
+              required 
+              autocomplete="email"
+              value=""
+            />
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+            </svg>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="adminPassword">Password</label>
+          <div class="input-with-icon">
+            <input 
+              type="password" 
+              id="adminPassword" 
+              class="form-input" 
+              placeholder="••••••••••••" 
+              required 
+              autocomplete="current-password"
+              value=""
+            />
+            <svg class="input-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+          </div>
+        </div>
+
+        <button type="submit" id="btnAdminSubmit" class="btn-admin-submit">
+          <span>Authenticate & Enter Portal</span>
+        </button>
+      </form>
+
+      <div class="login-footer">
+        <a href="/" class="login-back-link">
+          <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Return to Farmigo Landing Page
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin-login.js"></script>
+</body>
+</html>
