@@ -65,12 +65,45 @@ public class WebMvcConfig implements WebMvcConfigurer {
         }
     }
 
+    @org.springframework.beans.factory.annotation.Value("${cors.allowed-origins:https://farmercustomer.vercel.app,http://localhost:3000,http://localhost:5000,http://localhost:5173,http://127.0.0.1:5500}")
+    private String allowedOrigins;
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        java.util.List<String> origins = new java.util.ArrayList<>();
+        if (allowedOrigins != null && !allowedOrigins.trim().isEmpty()) {
+            for (String origin : allowedOrigins.split(",")) {
+                String trimmed = origin.trim();
+                if (!trimmed.isEmpty() && !origins.contains(trimmed)) {
+                    origins.add(trimmed);
+                }
+            }
+        }
+
+        if (!origins.contains("https://farmercustomer.vercel.app")) {
+            origins.add("https://farmercustomer.vercel.app");
+        }
+        if (!origins.contains("https://farmercustomer.vercel.app/")) {
+            origins.add("https://farmercustomer.vercel.app/");
+        }
+        if (!origins.contains("https://*.vercel.app")) {
+            origins.add("https://*.vercel.app");
+        }
+        if (!origins.contains("http://localhost:[*]")) {
+            origins.add("http://localhost:[*]");
+        }
+        if (!origins.contains("http://127.0.0.1:[*]")) {
+            origins.add("http://127.0.0.1:[*]");
+        }
+        if (!origins.contains("*")) {
+            origins.add("*");
+        }
+
         registry.addMapping("/**")
-                .allowedOriginPatterns("*")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                .allowedOriginPatterns(origins.toArray(new String[0]))
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
                 .allowedHeaders("*")
+                .exposedHeaders("Authorization", "Content-Type", "Accept", "Origin", "Access-Control-Request-Method", "Access-Control-Request-Headers")
                 .allowCredentials(true)
                 .maxAge(3600);
     }
