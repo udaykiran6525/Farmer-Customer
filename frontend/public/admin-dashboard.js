@@ -3,7 +3,9 @@
  * Manages live MySQL data fetching, Chart.js analytics, user moderation, product approval, support tickets & security audit logs.
  */
 
-const API = '';
+const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? (window.location.port === '5000' ? '' : 'https://farmer-customer.onrender.com')
+  : 'https://farmer-customer.onrender.com';
 
 function normalizeCategory(rawCat) {
   if (!rawCat || typeof rawCat !== 'string') return null;
@@ -183,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
       ...(options.headers || {})
     };
 
-    let url = `/api/admin${endpoint}`;
+    let url = `${API}/api/admin${endpoint}`;
     if (options.method === undefined || options.method === 'GET') {
       url += (url.includes('?') ? '&' : '?') + '_t=' + Date.now();
     }
