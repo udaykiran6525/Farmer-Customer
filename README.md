@@ -218,10 +218,6 @@ For Linux/Mac:
 
 ./mvnw spring-boot:run
 
-Backend URL:
-
-http://localhost:5000
-
 4. Setup Frontend
 
 Open another terminal:
@@ -235,10 +231,6 @@ npm install
 Start the frontend:
 
 npm run dev
-
-Frontend URL:
-
-http://localhost:5173
 
 🔄 Order Flow
 
