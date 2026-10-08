@@ -1,0 +1,19 @@
+#!/bin/sh
+# Apache Maven Wrapper startup script
+set -e
+MAVEN_PROJECTBASEDIR="$(cd "$(dirname "$0")" && pwd)"
+if [ ! -f "$MAVEN_PROJECTBASEDIR/.mvn/wrapper/maven-wrapper.properties" ]; then
+    echo "Error: $MAVEN_PROJECTBASEDIR/.mvn/wrapper/maven-wrapper.properties not found!" >&2
+    exit 1
+fi
+if [ -z "$JAVA_HOME" ]; then
+    JAVACMD="java"
+else
+    JAVACMD="$JAVA_HOME/bin/java"
+fi
+if ! "$JAVACMD" -version >/dev/null 2>&1; then
+    echo "Error: JAVA_HOME is not set and no 'java' command could be found in your PATH." >&2
+    exit 1
+fi
+WRAPPER_JAR="$MAVEN_PROJECTBASEDIR/.mvn/wrapper/maven-wrapper.jar"
+exec "$JAVACMD" "-Dmaven.multiModuleProjectDirectory=$MAVEN_PROJECTBASEDIR" -jar "$WRAPPER_JAR" "$@"
