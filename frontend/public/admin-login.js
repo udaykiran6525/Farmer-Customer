@@ -3,6 +3,10 @@
  * Handles JWT Authentication, token storage, and secure redirection.
  */
 
+const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? (window.location.port === '5000' ? '' : 'https://farmer-customer.onrender.com')
+  : 'https://farmer-customer.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('adminLoginForm');
   const emailInput = document.getElementById('adminEmail');
@@ -11,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorBox = document.getElementById('loginError');
 
   // 1. Initialize default admin account in background on load
-  fetch('/api/admin/auth/init', {
+  fetch(API + '/api/admin/auth/init', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' }
   }).catch(err => console.log('Admin init check:', err));
@@ -20,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const existingToken = localStorage.getItem('farmigo_admin_token');
   if (existingToken) {
     // Verify if token is still valid
-    fetch('/api/admin/dashboard/stats', {
+    fetch(API + '/api/admin/dashboard/stats', {
       headers: { 'Authorization': `Bearer ${existingToken}` }
     })
     .then(res => {
@@ -54,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
       hideError();
 
       try {
-        const response = await fetch('/api/admin/auth/login', {
+        const response = await fetch(API + '/api/admin/auth/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
