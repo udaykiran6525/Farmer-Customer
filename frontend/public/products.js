@@ -5,7 +5,9 @@
 
 'use strict';
 
-const API = '';
+const API = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ? (window.location.port === '5000' ? '' : 'https://farmer-customer.onrender.com')
+  : 'https://farmer-customer.onrender.com';
 let currentUser = null;
 let cartData = { items: [], total: 0, itemCount: 0 };
 let wishlistIds = new Set();
@@ -96,6 +98,7 @@ function getProductImg(p) {
     if (url) {
       if (url.includes('localhost:5000')) url = url.substring(url.indexOf('/uploads'));
       if (url.includes('127.0.0.1:5000')) url = url.substring(url.indexOf('/uploads'));
+      if (url.includes('farmer-customer.onrender.com')) url = url.substring(url.indexOf('/uploads'));
       return url.startsWith('/uploads') ? (API + url) : url;
     }
   }
