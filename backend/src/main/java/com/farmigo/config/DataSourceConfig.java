@@ -32,14 +32,45 @@ public class DataSourceConfig {
     @Bean
     @Primary
     public DataSource dataSource() {
-        log.info("Checking connection to MySQL database at: {}", mysqlUrl);
-        try (Connection conn = DriverManager.getConnection(mysqlUrl, mysqlUsername, mysqlPassword)) {
-            log.info("✅ Successfully connected to MySQL database (farmigo_db)!");
+        String effectiveUrl = mysqlUrl;
+        String effectiveUser = mysqlUsername;
+        String effectivePass = mysqlPassword;
+
+        // Auto-handle JDBC URLs with embedded credentials (e.g. jdbc:mysql://user:pass@host:port/db)
+        if (effectiveUrl != null && effectiveUrl.contains("@")) {
+            try {
+                int protoIdx = effectiveUrl.indexOf("://");
+                if (protoIdx != -1) {
+                    String prefix = effectiveUrl.substring(0, protoIdx + 3);
+                    String rest = effectiveUrl.substring(protoIdx + 3);
+                    int atIndex = rest.indexOf("@");
+                    if (atIndex != -1) {
+                        String userPass = rest.substring(0, atIndex);
+                        String hostAndDb = rest.substring(atIndex + 1);
+                        if (userPass.contains(":")) {
+                            int colonIdx = userPass.indexOf(":");
+                            effectiveUser = userPass.substring(0, colonIdx);
+                            effectivePass = userPass.substring(colonIdx + 1);
+                        } else {
+                            effectiveUser = userPass;
+                        }
+                        effectiveUrl = prefix + hostAndDb;
+                    }
+                }
+            } catch (Exception e) {
+                log.warn("Could not parse embedded credentials from DB_URL: {}", e.getMessage());
+            }
+        }
+
+        log.info("Checking connection to MySQL database at: {}", effectiveUrl);
+        try (Connection conn = DriverManager.getConnection(effectiveUrl, effectiveUser, effectivePass)) {
+            String catalog = conn.getCatalog();
+            log.info("✅ Successfully connected to MySQL database ({})!", catalog != null ? catalog : "connected");
             return DataSourceBuilder.create()
                     .driverClassName(mysqlDriver)
-                    .url(mysqlUrl)
-                    .username(mysqlUsername)
-                    .password(mysqlPassword)
+                    .url(effectiveUrl)
+                    .username(effectiveUser)
+                    .password(effectivePass)
                     .build();
         } catch (Exception e) {
             log.warn("⚠️ MySQL service is currently offline or unreachable ({})", e.getMessage());
